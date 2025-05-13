@@ -10,6 +10,11 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'main_image', 'availability'];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     // Relasi ke SupportingImage
     public function supportingImages()
     {

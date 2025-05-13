@@ -3,30 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-                // Semua produk
-        $products = Product::latest()->get();
-
-        // 5 produk teratas berdasarkan kunjungan
-        $topProducts = Product::orderByDesc('visits')->take(5)->get();
-
-        return view('home', compact('products', 'topProducts'));
-
+        // Ambil nilai pencarian dan filter kategori dari request
         $search = $request->query('search');
-        $products = Product::with('supportingImages')
+        $categoryId = $request->query('category');
+
+        // Query produk dengan pencarian dan filter kategori jika ada
+        $products = Product::with('supportingImages', 'category')
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when($categoryId, function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
             })
             ->where('availability', true)
             ->latest()
             ->get();
 
-        return view('home', compact('products'));
+        // Ambil 5 produk teratas berdasarkan jumlah kunjungan
+        $topProducts = Product::where('availability', true)
+            ->orderByDesc('visits')
+            ->take(5)
+            ->get();
+
+        // Ambil semua kategori untuk dropdown filter
+        $categories = Category::all();
+
+        // Kirim data ke view
+        return view('home', compact('products', 'topProducts', 'categories'));
     }
 }
-

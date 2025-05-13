@@ -7,7 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('homepage');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Middleware
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login')->defaults('guard', 'admin');
