@@ -65,5 +65,8 @@ Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('pro
 // Update Produk - Menyimpan perubahan produk
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 
+// Show Produk - Melihat jumlah kunjungan
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
 // Hapus Produk - Menghapus produk
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');

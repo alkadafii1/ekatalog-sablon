@@ -46,7 +46,7 @@
 
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand text-white" href="#">Toko Kami</a>
+        <a class="navbar-brand text-white" href="#">Toko Victory</a>
         <div class="ml-auto">
             <a href="{{ route('login') }}" class="btn btn-light btn-sm mr-2">Login</a>
             <a href="{{ route('register') }}" class="btn btn-warning btn-sm">Register</a>

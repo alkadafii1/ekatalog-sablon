@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p>
-                        <a href="#" class="btn btn-sm btn-primary">Lihat Detail</a>
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                     </div>
                 </div>
             </div>
