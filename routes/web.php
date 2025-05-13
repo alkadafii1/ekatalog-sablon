@@ -4,11 +4,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('homepage');
 
 // Middleware
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login')->defaults('guard', 'admin');
