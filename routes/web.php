@@ -5,6 +5,7 @@ use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -68,5 +69,8 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('pr
 
 // Show Produk - Melihat jumlah kunjungan
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
+// Show Produk - Melihat jumlah kunjungan
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');;
 
 

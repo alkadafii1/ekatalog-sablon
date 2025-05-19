@@ -22,7 +22,15 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary btn-block">Filter</button>
+           <style>
+            .btn-brown {
+                background-color: #FFCB74;
+                color: white;
+            }
+            </style>
+
+            <button class="btn btn-brown btn-block">Filter</button>
+
         </div>
         <div class="col-md-2">
             <a href="{{ route('home') }}" class="btn btn-secondary btn-block">Reset</a>

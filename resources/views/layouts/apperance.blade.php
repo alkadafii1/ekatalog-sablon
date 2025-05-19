@@ -50,8 +50,9 @@
     <div class="container">
         <a class="navbar-brand text-white" href="#">Toko Victory</a>
         <div class="ml-auto">
-            <a href="{{ route('login') }}" class="btn btn-warning btn-sm">Login</a>
-            <a href="{{ route('register') }}" class="btn btn-warning btn-sm">Register</a>
+            <a href="{{ route('login') }}" class="btn btn-sm" style="background-color: white; color: black; border: 1px solid #ccc;">Login</a>
+            <a href="{{ route('register') }}" class="btn btn-warning btn-sm" style="color: black;">Register</a>
+
         </div>
     </div>
 </nav>
