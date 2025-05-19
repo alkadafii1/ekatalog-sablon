@@ -173,7 +173,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $('#deleteModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
@@ -182,4 +182,4 @@
             $('#deleteForm').attr('action', action);
         });
     </script>
-@endsection
+@endpush

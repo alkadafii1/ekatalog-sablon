@@ -38,8 +38,8 @@
                     <img src="{{ asset('storage/' . $product->main_image) }}" class="card-img-top product-img" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
-                        <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p>
-                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                        <!-- <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p> -->
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     <img src="{{ asset('storage/' . $product->main_image) }}" class="card-img-top product-img" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
-                        <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p>
+                        <!-- <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p> -->
                         <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                     </div>
                 </div>

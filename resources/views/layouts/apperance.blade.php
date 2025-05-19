@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Homepage')</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         body {
             background-color: #f1f3f4;
@@ -11,7 +13,7 @@
         }
 
         .navbar {
-            background-color: #4285f4;
+            background-color: #FFCB74;
         }
 
         .navbar a {
@@ -48,7 +50,7 @@
     <div class="container">
         <a class="navbar-brand text-white" href="#">Toko Victory</a>
         <div class="ml-auto">
-            <a href="{{ route('login') }}" class="btn btn-light btn-sm mr-2">Login</a>
+            <a href="{{ route('login') }}" class="btn btn-warning btn-sm">Login</a>
             <a href="{{ route('register') }}" class="btn btn-warning btn-sm">Register</a>
         </div>
     </div>
