@@ -11,14 +11,12 @@ class CategoriesTableSeeder extends Seeder
     {
         DB::table('categories')->insert([
             [
-                'nama' => 'Undangan-1010',
-                'slug' => 'Undangan',
-                'deskripsi' => 'Kategori untuk undangan'
+                'nama' => 'Undangan',
+                'deskripsi' => 'Kategori untuk undangan',
             ],
             [
-                'nama' => 'Spidol',
-                'slug' => 'Alat & bahan',
-                'deskripsi' => 'Kategori untuk alat & bahan'
+                'nama' => 'alat & bahan',
+                'deskripsi' => 'Kategori untuk alat & bahan',
             ]
         ]);
 

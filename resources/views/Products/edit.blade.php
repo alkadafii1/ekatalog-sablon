@@ -92,7 +92,20 @@
                         <label for="name">Nama Produk</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" required>
                     </div>
-                    
+
+                    <div class="form-group">
+                    <label for="category_id">Kategori Produk</label>
+                    <select class="form-control" id="category_id" name="category_id" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" 
+                                {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                {{ $category->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                    </div>
+       
                     <div class="form-group">
                         <label for="description">Deskripsi Produk</label>
                         <textarea class="form-control" id="description" name="description" rows="4">{{ $product->description }}</textarea>

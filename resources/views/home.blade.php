@@ -11,15 +11,15 @@
                    placeholder="Nama produk..." value="{{ request('search') }}">
         </div>
         <div class="col-md-4">
-            <label for="category">Kategori</label>
-            <select name="category" id="category" class="form-control">
-                <option value="">-- Semua Kategori --</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
+                    <label for="category">Kategori</label>
+        <select name="category" id="category" class="form-control">
+            <option value="">-- Semua Kategori --</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                    {{ $category->nama }}
+                </option>
+            @endforeach
+        </select>
         </div>
         <div class="col-md-2">
            <style>
