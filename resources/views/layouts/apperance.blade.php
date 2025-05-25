@@ -50,6 +50,11 @@
     <div class="container">
         <a class="navbar-brand text-white" href="#">Toko Victory</a>
         <div class="ml-auto">
+            @auth
+    <a href="{{ route('wishlist.index') }}" class="btn btn-outline-warning">
+        ❤️ Wishlist
+    </a>
+@endauth
             <a href="{{ route('user.login') }}" class="btn btn-sm" style="background-color: white; color: black; border: 1px solid #ccc;">Login</a>
             <a href="{{ route('register') }}" class="btn btn-warning btn-sm" style="color: black;">Register</a>
 
