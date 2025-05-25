@@ -1,30 +1,30 @@
 <?php
 
+// File: app/Http/Controllers/WishlistController.php
+
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
     public function index()
-{
-    // Simulasi data dummy produk wishlist (jika belum pakai database)
-    $wishlists = collect([
-        (object)[
-            'id' => 1,
-            'name' => 'Produk Dummy 1',
-            'main_image' => 'images/sample-product.jpg',
-            'description' => 'Deskripsi singkat produk dummy 1',
-        ],
-        (object)[
-            'id' => 2,
-            'name' => 'Produk Dummy 2',
-            'main_image' => 'images/sample-product.jpg',
-            'description' => 'Deskripsi singkat produk dummy 2',
-        ],
-    ]);
+    {
+        $wishlistItems =  auth::user()->wishes()->with('category')->get();
+        return view('wishlist.index', compact('wishlistItems'));
+    }
 
-    return view('wishlist.index', compact('wishlists'));
-}
+    public function store(Product $product)
+    {
+        auth::user()->wishes()->syncWithoutDetaching([$product->id]);
+        return back()->with('success', 'Produk ditambahkan ke wishlist');
+    }
 
+    public function destroy(Product $product)
+    {
+        auth::user()->wishes()->detach($product->id);
+        return back()->with('success', 'Produk dihapus dari wishlist');
+    }
 }
