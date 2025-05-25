@@ -18,7 +18,10 @@ class AdminLoginRequest extends FormRequest
 
     public function authenticate(): void
     {
-        if (!Auth::guard('admin')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!Auth::guard('admin')->attempt(
+            array_merge($this->only('email', 'password'), ['role' => 'admin']), 
+            $this->boolean('remember')
+        )) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);

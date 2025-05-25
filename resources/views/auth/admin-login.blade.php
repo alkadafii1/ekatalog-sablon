@@ -31,6 +31,7 @@
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
+                        <input type="hidden" name="guard" value="admin">
 
                     <div class="mb-4">
                         <input id="email" type="email" name="email" placeholder="Email"

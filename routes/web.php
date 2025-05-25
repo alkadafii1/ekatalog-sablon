@@ -6,23 +6,41 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Middleware
-Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login')->defaults('guard', 'admin');
-Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])->name('user.login')->defaults('guard', 'web');
 
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])->name('admin.login.post')->defaults('guard', 'admin');
-Route::post('/user/login', [AuthenticatedSessionController::class, 'store'])->name('user.login.post')->defaults('guard', 'web');
+// USER LOGIN
+Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest:web')
+    ->name('user.login')
+    ->defaults('guard', 'web');
 
-// LOGIN ADMIN (tanpa Google)
-Route::middleware(['auth.admin'])->group(function () {
-    Route::get('/dashboard', function () {
+Route::post('/user/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest:web')
+    ->name('user.login.post')
+    ->defaults('guard', 'web');
+
+// ADMIN LOGIN
+Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest:admin')
+    ->name('admin.login')
+    ->defaults('guard', 'admin');
+
+Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest:admin')
+    ->name('admin.login.post')
+    ->defaults('guard', 'admin');
+
+// ADMIN DASHBOARD (hanya untuk admin)
+Route::middleware(['auth:admin', 'checkRole:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
-    })->name('dashboard');
+    })->name('admin.dashboard');
 });
+
 
 // LOGIN USER (pakai Google)
 // Route::middleware('guest:web')->group(function () {

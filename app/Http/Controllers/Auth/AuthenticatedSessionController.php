@@ -17,7 +17,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): View
     {
-        $guard = $request->get('guard');
+        $guard = $request->route()->defaults['guard'] ?? 'web';
 
         if ($guard === 'admin') {
             return view('auth.admin-login');
@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request): RedirectResponse
 {
-    $guard = $request->get('guard', 'web'); // Default 'web' untuk user
+     $guard = $request->route()->defaults['guard'] ?? 'web';
 
     if ($guard === 'admin') {
         return $this->loginAdmin(app(AdminLoginRequest::class), $request);
@@ -42,16 +42,17 @@ class AuthenticatedSessionController extends Controller
 
 protected function loginUser(UserLoginRequest $request): RedirectResponse
 {
-    $request->authenticate(); // ini juga validasi otomatis
+    $request->authenticate(); 
 
     $request->session()->regenerate();
 
-    return redirect()->intended(route('dashboard'));
+    return redirect()->intended(route('home'));
+
 }
 
 protected function loginAdmin(AdminLoginRequest $request): RedirectResponse
 {
-    $request->authenticate(); // ini juga validasi otomatis
+    $request->authenticate(); 
 
     $request->session()->regenerate();
 
@@ -63,7 +64,8 @@ protected function loginAdmin(AdminLoginRequest $request): RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $guard = $request->get('guard', 'web');
+        
+        $guard = $request->route()->defaults['guard'] ?? 'web';
 
         // Logout sesuai guard
         Auth::guard($guard)->logout();
