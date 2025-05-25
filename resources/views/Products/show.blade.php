@@ -34,7 +34,30 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h3 class="card-title mb-0">{{ $product->name }}</h3>
 
-            {{-- Tombol Wishlist (siap difungsikan, dikomentari sementara) --}}
+            {{-- Tombol Order WA --}}
+
+            @php
+                $whatsapp_number = '6289683028254';
+                $product_image = asset('storage/' . $product->main_image); 
+                
+                $message = "Halo, saya ingin memesan produk berikut:\n\n";
+                $message .= "✨ *{$product->name}*\n";
+                $message .= "▫️ Kategori: {$product->category->nama}\n";
+                $message .= "▫️ Deskripsi: {$product->description}\n";
+                $message .= "▫️ Gambar: {$product_image}\n\n"; 
+                $message .= "Apakah produk ini tersedia?";
+                $encoded_message = urlencode($message);
+            @endphp
+
+            <a 
+                href="https://wa.me/{{ $whatsapp_number }}?text={{ $encoded_message }}" 
+                class="btn btn-sm btn-success mb-2"
+                target="_blank"
+            >
+                📲 Pesan via WA
+            </a>
+
+            {{-- Tombol Wishlist --}}
             {{--
             @auth
             <form action="{{ route('wishlist.store', $product->id) }}" method="POST">
