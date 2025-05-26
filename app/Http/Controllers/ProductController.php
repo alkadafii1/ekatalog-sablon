@@ -53,7 +53,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'main_image' => $mainImagePath,
             'availability' => $request->availability,
-            'category_id' => $request->category_id, // Simpan category_id
+            'category_id' => $request->category_id, 
         ]);
 
         // Simpan gambar pendukung jika ada

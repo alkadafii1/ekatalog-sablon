@@ -1,4 +1,4 @@
-@extends('layouts.apperance')
+@extends('layouts.user')
 
 @section('title', 'Wishlist Saya')
 
@@ -25,7 +25,7 @@
                     </h5>
 
                     {{-- Tombol hapus dari wishlist (belum difungsikan) --}}
-                    {{--
+                   
                     <form action="{{ route('wishlist.destroy', $i) }}" method="POST">
                         @csrf
                         @method('DELETE')
@@ -33,7 +33,7 @@
                             <i class="fas fa-heart-broken"></i>
                         </button>
                     </form>
-                    --}}
+                    
                     <button class="btn btn-sm btn-outline-danger" disabled title="Belum bisa dihapus">
                         <i class="fas fa-heart-broken"></i>
                     </button>

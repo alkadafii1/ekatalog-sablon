@@ -103,5 +103,7 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 
 // Show Produk - Melihat jumlah kunjungan
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');;
+// Show Produk - Melihat jumlah kunjungan
+Route::get('/akun', [ProductController::class, 'index'])->name('products.index');;
 
 

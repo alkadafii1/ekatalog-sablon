@@ -17,6 +17,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        object-fit: contain;
+
     }
 </style>
 
@@ -27,11 +30,14 @@
     </a>
 
     {{-- Gambar Produk --}}
-    <img src="{{ asset('storage/' . $product->main_image) }}" class="card-img-top" alt="{{ $product->name }}">
+    <img src="{{ asset('storage/' . $product->main_image) }}"
+     class="img-fluid rounded-start"
+     style="max-height: 700px; width: 100%; object-fit: contain; background-color: #f8f9fa; border-radius: 10px;"
+     alt="{{ $product->name }}">
 
     <div class="card-body">
         {{-- Nama Produk + Wishlist --}}
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="card-title mb-0">{{ $product->name }}</h3>
 
             {{-- Tombol Order WA --}}
@@ -49,33 +55,40 @@
                 $encoded_message = urlencode($message);
             @endphp
 
-            <a 
-                href="https://wa.me/{{ $whatsapp_number }}?text={{ $encoded_message }}" 
-                class="btn btn-sm btn-success mb-2"
-                target="_blank"
-            >
-                📲 Pesan via WA
-            </a>
+            <div class="d-flex flex-wrap gap-3">
+                {{-- Tombol WA --}}
+                <a 
+                    href="https://wa.me/{{ $whatsapp_number }}?text={{ $encoded_message }}" 
+                    class="btn btn-success d-flex align-items-center"
+                    target="_blank"
+                >
+                    <i class="fab fa-whatsapp me-2"></i>  Pesan via WA
+                </a>
 
-            {{-- Tombol Wishlist --}}
-            {{--
-            @auth
-            <form action="{{ route('wishlist.store', $product->id) }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-outline-danger">
-                    <i class="fas fa-heart"></i>
+                {{-- Tombol Wishlist --}}
+                @auth
+                <form action="{{ route('wishlist.store', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger d-flex align-items-center">
+                        <i class="fas fa-heart me-2"></i>  Tambah ke Wishlist
+                    </button>
+                </form>
+                @else
+                <button class="btn btn-outline-danger d-flex align-items-center" enable>
+                    <i class="fas fa-heart me-2"></i> Tambah ke Wishlist
                 </button>
-            </form>
-            @endauth
-            --}}
-            <button class="btn btn-outline-danger" disabled>
-                <i class="fas fa-heart"></i>
-            </button>
+                @endauth
+            </div>
+
         </div>
 
         {{-- Jumlah Dilihat --}}
-        <p><i class="fas fa-eye text-secondary"></i> {{ $product->visits }} kali</p>
-
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <p><i class="fas fa-eye text-secondary"></i> {{ $product->visits }} kali</p>
+            <span class="{{ $product->availability ? 'text-success font-weight-bold' : 'text-danger font-weight-bold' }}">
+            {{ $product->availability ? 'Tersedia' : 'Tidak Tersedia' }}
+            </span>
+        </div>
         {{-- Deskripsi --}}
         <p class="card-text">{{ $product->description }}</p>
     </div>

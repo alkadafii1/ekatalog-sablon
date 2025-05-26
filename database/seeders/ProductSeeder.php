@@ -2,30 +2,48 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Faker\Factory as Faker; 
 use Illuminate\Database\Seeder;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $faker = Faker::create();
-        for ($i = 0; $i < 2; $i++) {
-            Product::create([
-                'name' => $faker->word,
-                'description' => $faker->sentence,
-                'main_image' => $faker->imageUrl(640, 480, 'products'),
-                'supporting_images' => json_encode([
-                    $faker->imageUrl(640, 480, 'products'),
-                    $faker->imageUrl(640, 480, 'products'),
-                ]),
-                'availability' => $faker->boolean,
-            ]);
+        // Ambil kategori berdasarkan nama
+        $undangan = Category::where('nama', 'Undangan')->first();
+        $alatBahan = Category::where('nama', 'alat & bahan')->first();
+
+        // Pastikan kategori ditemukan
+        if (!$undangan || !$alatBahan) {
+            $this->command->error('Kategori tidak ditemukan. Jalankan CategoriesTableSeeder terlebih dahulu.');
+            return;
         }
+
+        // Produk untuk kategori Undangan
+        Product::create([
+            'name' => 'Undangan Digital A',
+            'description' => 'Undangan digital untuk acara pernikahan.',
+            'main_image' => 'images/undangan_a.jpg',
+            'supporting_images' => json_encode([
+                'images/undangan_a_1.jpg',
+                'images/undangan_a_2.jpg',
+            ]),
+            'availability' => true,
+            'category_id' => $undangan->id,
+        ]);
+
+        // Produk untuk kategori Alat & Bahan
+        Product::create([
+            'name' => 'Amplop Coklat',
+            'description' => 'Amplop untuk undangan berbahan daur ulang.',
+            'main_image' => 'images/amplop.jpg',
+            'supporting_images' => json_encode([
+                'images/amplop_1.jpg',
+                'images/amplop_2.jpg',
+            ]),
+            'availability' => true,
+            'category_id' => $alatBahan->id,
+        ]);
     }
 }
