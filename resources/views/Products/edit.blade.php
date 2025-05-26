@@ -22,7 +22,8 @@
         }
         .page-header i {
             margin-right: 10px;
-            color: #FFCB74;
+            color: #578FCA;
+;
         }
         .card {
             border-radius: 8px;
@@ -40,7 +41,7 @@
         }
         .card-header i {
             margin-right: 10px;
-            color: #FFCB74;
+            color: #578FCA;
         }
         .form-control {
             border-radius: 4px;
@@ -53,12 +54,12 @@
             box-shadow: 0 0 0 0.2rem rgba(160, 174, 192, 0.25);
         }
         .btn-primary {
-            background-color: #FFCB74;
-            border-color: #FFCB74;
+            background-color: #578FCA;
+            border-color: #578FCA;
         }
         .btn-primary:hover {
-            background-color: #6c44e0;
-            border-color: #6c44e0;
+            background-color:rgb(148, 179, 211);
+            border-color:rgb(148, 179, 211);
         }
         .btn-secondary {
             background-color: #a0aec0;

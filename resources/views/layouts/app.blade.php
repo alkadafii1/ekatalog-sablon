@@ -13,18 +13,19 @@
             --brown-dark: #2F2F2F;
             --brown-light: #FFCB74;
             --red: #DC3545;
+            --blue: #578FCA;
         }
 
         body {
             background-color: var(--white);
             font-family: Arial, sans-serif;
-            color: var(--brown-dark);
+            color: var(--blue);
             overflow-x: hidden;
             padding-top: 60px;
         }
 
         .navbar {
-            background-color: var(--brown-light);
+            background-color: #4E71FF;
             position: fixed;
             top: 0;
             width: 100%;
@@ -82,7 +83,7 @@
             display: flex;
             align-items: center;
             padding: 10px 15px;
-            color: var(--brown-dark);
+            color: var(--blue);
             text-decoration: none;
             white-space: nowrap;
         }
@@ -129,12 +130,12 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            background-color: var(--brown-light);
+            background-color: var(--blue);
             border: none;
             width: 40px;
             height: 40px;
             border-radius: 5px;
-            color: var(--brown-dark);
+            color: var(--white);
             font-size: 18px;
             z-index: 1002;
             display: flex;

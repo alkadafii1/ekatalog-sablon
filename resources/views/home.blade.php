@@ -5,15 +5,15 @@
 @section('content')
 <style>
     .btn-brown {
-        background-color: #FFCB74;
+        background-color: #4E71FF;
         color: white;
     }
     .btn-outline-brown {
-        border-color: #FFCB74;
-        color: #FFCB74;
+        border-color: #4E71FF;
+        color: #4E71FF;
     }
     .btn-outline-brown:hover {
-        background-color: #FFCB74;
+        background-color: #4E71FF;
         color: white;
     }
     .product-card {
@@ -61,7 +61,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $product->name }}</h5>
 
-            @php
+            <!-- @php
                 $whatsapp_number = '6289683028254';
                 $product_image = asset('storage/' . $product->main_image); 
                 
@@ -80,15 +80,15 @@
                 target="_blank"
             >
                 📲 Pesan via WA
-            </a>
+            </a> -->
                     
                     <!-- Tombol Wishlist -->
-                    @auth
+                    <!-- @auth
                         <form action="{{ route('wishlist.store', $product) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="submit" class="btn btn-sm {{ auth()->user()->wishes->contains($product->id) ? 'btn-danger' : 'btn-outline-danger' }}">
                                 @if(auth()->user()->wishes->contains($product->id))
-                                    ❤️ Hapus dari Wishlist
+                                     Hapus dari Wishlist
                                 @else
                                     ♡ Tambah ke Wishlist
                                 @endif
@@ -96,7 +96,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger mb-2">♡ Tambah ke Wishlist</a>
-                    @endauth
+                    @endauth -->
                     
                     <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                 </div>
@@ -114,7 +114,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $product->name }}</h5>
 
-            @php
+            <!-- @php
                 $whatsapp_number = '6289683028254';
                 $product_image = asset('storage/' . $product->main_image); 
                 
@@ -133,15 +133,15 @@
                 target="_blank"
             >
                 📲 Pesan via WA
-            </a>
+            </a> -->
                     
                     <!-- Tombol Wishlist -->
-                    @auth
+                    <!-- @auth
                         <form action="{{ route('wishlist.store', $product) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="submit" class="btn btn-sm {{ auth()->user()->wishes->contains($product->id) ? 'btn-danger' : 'btn-outline-danger' }}">
                                 @if(auth()->user()->wishes->contains($product->id))
-                                    ❤️ Hapus dari Wishlist
+                                     Hapus dari Wishlist
                                 @else
                                     ♡ Tambah ke Wishlist
                                 @endif
@@ -149,7 +149,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger mb-2">♡ Tambah ke Wishlist</a>
-                    @endauth
+                    @endauth -->
                     
                     <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                 </div>

@@ -10,6 +10,7 @@
             --brown-dark: #2F2F2F;
             --brown-light: #FFCB74;
             --red: #DC3545;
+            --blue: #578FCA;
         }
 
         body {
@@ -33,13 +34,13 @@
         }
 
         .btn-primary {
-            background-color: var(--brown-light);
+            background-color: var(--blue);
             border: none;
-            color: var(--brown-dark);
+            color: var(--white);
         }
 
         .btn-primary:hover {
-            background-color: #e0b45f;
+            background-color: #578FCA;
         }
 
         .btn-danger {
@@ -48,7 +49,7 @@
         }
 
         .table th {
-            background-color: var(--brown-dark);
+            background-color: var(--blue);
             color: white;
         }
 
@@ -64,21 +65,23 @@
         }
 
         .btn-edit {
-            background-color: var(--brown-light);
-            color: var(--brown-dark);
+            background-color: var(--blue);
+            color: var(--white);
         }
 
         .btn-edit:hover {
-            background-color: #e0b45f;
+            background-color: #A1E6FD;
+            color: var(--white);
         }
 
         .btn-delete {
-            background-color: var(--brown-light);
-            color: black;
+            background-color: var(--blue);
+            color: white;
         }
 
         .btn-delete:hover {
-            background-color: #bb2d3b;
+            background-color: #A1E6FD;
+            color: white;
         }
 
         .product-image {
