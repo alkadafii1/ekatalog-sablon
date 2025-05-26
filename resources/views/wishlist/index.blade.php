@@ -80,7 +80,7 @@ document.getElementById('pesanViaWA')?.addEventListener('click', function() {
     message += "Apakah produk ini tersedia?";
 
     let encodedMessage = encodeURIComponent(message);
-    let waNumber = "6289683028254"; // ganti sesuai kebutuhan
+    let waNumber = "6289683028254"; 
     let waLink = `https://wa.me/${waNumber}?text=${encodedMessage}`;
 
     window.open(waLink, '_blank');
