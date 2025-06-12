@@ -198,7 +198,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-content">
             <div class="logo">
-                <i class="fas fa-cogs"></i> <span class="nav-text">Admin Panel</span>
+                <i class="fas fa-cogs"></i> <span class="nav-text">Admi Panel</span>
             </div>
             <a href="{{ route('dashboard') }}" class="nav-item">
                 <span class="nav-icon"><i class="fas fa-home"></i></span>

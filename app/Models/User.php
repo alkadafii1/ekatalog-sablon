@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -82,6 +83,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function reviews() 
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function wishes(): BelongsToMany

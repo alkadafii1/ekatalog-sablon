@@ -41,7 +41,7 @@ class ProductController extends Controller
             'supporting_images.*' => 'image',
             //'availability' => 'required|boolean',
             'availability' => 'required|in:0,1',
-            'category_id' => 'required|exists:categories,id', // Validasi kategori wajib dipilih
+            'category_id' => 'required|exists:categories,id', 
         ]);
 
         // Simpan gambar utama
@@ -73,7 +73,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::all(); // Kirim data kategori ke view
+        $categories = Category::all(); 
         return view('products.edit', compact('product', 'categories'));
     }
 
@@ -157,6 +157,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+        
 
         // Tambah jumlah kunjungan
         $product->increment('visits');

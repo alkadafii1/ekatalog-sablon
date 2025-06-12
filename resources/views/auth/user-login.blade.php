@@ -11,14 +11,12 @@
                 <h2 class="text-2xl font-bold text-gray-900">Welcome</h2>
                 <p class="text-gray-600 mb-4">Login</p>
 
-                <!-- Status sukses -->
                 @if (session('status'))
                     <div class="mb-4 p-3 bg-green-500 text-white rounded-lg">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <!-- Error validasi -->
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-500 text-white rounded-lg">
                         <ul class="list-disc list-inside text-sm">
@@ -29,7 +27,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('user.login.post') }}">
                     @csrf
 
                     <div class="mb-4">
@@ -51,7 +49,9 @@
                             {{ __('Remember Me') }}
                         </label>
 
-                        <a href="" class="inline-block px-6 py-2 text-white bg-red-600 rounded-lg shadow">Login with Google</a>
+                        <a href="{{ route('auth.google') }}" class="inline-block px-6 py-2 text-white bg-red-600 rounded-lg shadow">
+                            Login with Google
+                        </a>
 
                         @if (Route::has('password.request'))
                             <a href="{{ route('password.request') }}" class="text-blue-600 text-sm">

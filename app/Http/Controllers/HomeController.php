@@ -35,7 +35,6 @@ class HomeController extends Controller
         // Ambil semua kategori untuk dropdown filter
         $categories = Category::all();
 
-        // Kirim data ke view
         return view('home', compact('products', 'topProducts', 'categories'));
     }
 }

@@ -9,17 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+   public function up()
 {
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('role')->default('user')->after('email'); // default user
+    Schema::table('products', function (Blueprint $table) {
+        $table->float('rating')->default(0);
     });
 }
 
 public function down()
 {
-    Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn('role');
+    Schema::table('products', function (Blueprint $table) {
+        $table->dropColumn('rating');
     });
 }
 

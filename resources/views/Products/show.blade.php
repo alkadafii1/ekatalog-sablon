@@ -17,11 +17,32 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         object-fit: contain;
-
+    }
+    
+    /* Margin atas untuk notif */
+    .alert-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 </style>
+
+{{-- NOTIFIKASI --}}
+<div class="alert-container">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+</div>
 
 <div class="card mb-4 position-relative">
     {{-- Tombol kembali --}}
@@ -41,7 +62,6 @@
             <h3 class="card-title mb-0">{{ $product->name }}</h3>
 
             {{-- Tombol Order WA --}}
-
             @php
                 $whatsapp_number = '6289683028254';
                 $product_image = asset('storage/' . $product->main_image); 
@@ -79,7 +99,6 @@
                 </button>
                 @endauth
             </div>
-
         </div>
 
         {{-- Jumlah Dilihat --}}
@@ -89,6 +108,7 @@
             {{ $product->availability ? 'Tersedia' : 'Tidak Tersedia' }}
             </span>
         </div>
+        
         {{-- Deskripsi --}}
         <p class="card-text">{{ $product->description }}</p>
     </div>
@@ -98,11 +118,7 @@
 <div class="mb-4">
     <strong>Rating:</strong>
     @for ($i = 1; $i <= 5; $i++)
-        @if($i <= round($product->rating ?? 0))
-            <i class="fas fa-star text-warning"></i>
-        @else
-            <i class="far fa-star text-warning"></i>
-        @endif
+        <i class="{{ $i <= round($product->rating ?? 0) ? 'fas' : 'far' }} fa-star text-warning"></i>
     @endfor
     <span>({{ number_format($product->rating ?? 0, 1) }} dari 5)</span>
 </div>
@@ -113,6 +129,8 @@
         <h5>Ulasan Pengguna</h5>
     </div>
     <div class="card-body">
+        {{-- 🔽 HAPUS NOTIFIKASI DARI SINI 🔽 --}}
+        
         @if($product->reviews && $product->reviews->count())
             @foreach ($product->reviews as $review)
                 <div class="mb-3 border-bottom pb-2">
@@ -130,13 +148,95 @@
     </div>
 </div>
 
-{{-- Form Ulasan (placeholder, belum difungsikan) --}}
+{{-- Form Ulasan --}}
 <div class="card mb-5">
     <div class="card-header">
         <h5>Tulis Ulasan Anda</h5>
     </div>
     <div class="card-body">
-        <div class="alert alert-info">Form ulasan belum aktif. Silakan login dan aktifkan fungsionalitas nanti.</div>
+        @auth
+        {{-- Tampilkan error jika ada --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- Formulir input ulasan --}}
+        <form action="{{ route('reviews.store', $product->id) }}" method="POST">
+            @csrf
+
+            {{-- Rating Interaktif --}}
+            <div class="mb-3">
+                <label class="form-label">Rating</label>
+                <div class="star-rating">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <i class="fa fa-star" data-value="{{ $i }}"></i>
+                    @endfor
+                </div>
+                <input type="hidden" name="rating" id="rating" value="{{ old('rating', 0) }}">
+            </div>
+
+            {{-- Komentar --}}
+            <div class="mb-3">
+                <label for="comment" class="form-label">Komentar</label>
+                <textarea name="comment" id="comment" class="form-control" rows="3" placeholder="Tulis ulasan Anda di sini...">{{ old('comment') }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
+        </form>
+        @else
+        <div class="alert alert-warning">
+            Silakan <a href="{{ route('login') }}">login</a> untuk menulis ulasan.
+        </div>
+        @endauth
     </div>
 </div>
+
+{{-- CSS & Script --}}
+<style>
+    .star-rating .fa-star {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+    .star-rating .fa-star.selected {
+        color: #ffc107;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star-rating .fa-star');
+        const ratingInput = document.getElementById('rating');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const value = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = value;
+
+                // Reset semua bintang
+                stars.forEach(s => s.classList.remove('selected'));
+
+                // Warnai bintang sesuai rating
+                for (let i = 0; i < value; i++) {
+                    stars[i].classList.add('selected');
+                }
+            });
+        });
+
+       
+        const current = parseInt(ratingInput.value);
+        if (current > 0) {
+            for (let i = 0; i < current; i++) {
+                stars[i].classList.add('selected');
+            }
+        }
+    });
+</script>
 @endsection

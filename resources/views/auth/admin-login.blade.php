@@ -11,14 +11,12 @@
                 <h2 class="text-2xl font-bold text-gray-900">Welcome Back</h2>
                 <p class="text-gray-600 mb-4">Login Your Account</p>
 
-                <!-- Status sukses -->
                 @if (session('status'))
                     <div class="mb-4 p-3 bg-green-500 text-white rounded-lg">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <!-- Error validasi -->
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-500 text-white rounded-lg">
                         <ul class="list-disc list-inside text-sm">
@@ -31,7 +29,6 @@
 
                 <form method="POST" action="{{ route('admin.login.post') }}">
                     @csrf
-                        <input type="hidden" name="guard" value="admin">
 
                     <div class="mb-4">
                         <input id="email" type="email" name="email" placeholder="Email"

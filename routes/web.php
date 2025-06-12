@@ -1,109 +1,110 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SocialiteController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\OrderController;
-use App\Http\Middleware\CheckRole;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\{
+    Auth\AuthenticatedSessionController,
+    Auth\AdminLoginController,
+    Auth\UserLoginController,
+    HomeController,
+    OrderController,
+    ProductController,
+    ProfileController,
+    SocialiteController,
+    WishlistController,
+    ReviewController
+};
+use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Support\Facades\Route;
 
+// ====================
+// Home Route         
+// ====================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// ====================
+// USER Login Group
+// ====================
 
-// USER LOGIN
-Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
-    ->middleware('guest:web')
-    ->name('user.login')
-    ->defaults('guard', 'web');
+Route::middleware('guest')->group(function () {
+    Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
+        ->defaults('guard', 'web')
+        ->name('user.login');
 
-Route::post('/user/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest:web')
-    ->name('user.login.post')
-    ->defaults('guard', 'web');
+    Route::post('/user/login', [AuthenticatedSessionController::class, 'store'])
+        ->defaults('guard', 'web')
+        ->name('user.login.post');
+});
 
-// ADMIN LOGIN
-Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
-    ->middleware('guest:admin')
-    ->name('admin.login')
-    ->defaults('guard', 'admin');
+// ====================
+// ADMIN Login Group
+// ====================
+Route::middleware('guest:admin')->group(function () {
+    Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
+        ->defaults('guard', 'admin')
+        ->name('admin.login');
 
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest:admin')
-    ->name('admin.login.post')
-    ->defaults('guard', 'admin');
+    Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
+        ->defaults('guard', 'admin')
+        ->name('admin.login.post');
+});
 
-// ADMIN DASHBOARD (hanya untuk admin)
-Route::middleware(['auth:admin', 'checkRole:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+// Logout (admin dan user)
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+// ======================
+// Admin Protected Routes
+// ======================
+Route::middleware(['auth:admin', EnsureUserIsAdmin::class])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
 
 
-// LOGIN USER (pakai Google)
-// Route::middleware('guest:web')->group(function () {
-//     Route::get('/user/login', function () {
-//         return view('auth.user-login');
-//     })->name('user.login');
-// });
-
-Route::controller(SocialiteController::class)->group(function() {
-Route::get('auth/google', 'googleLogin')->name('auth.google');
-Route::get('auth/google-callback', 'googleAuthentication')->name('auth.google-callback');
+// ==============================
+// Google OAuth Login for Users
+// ==============================
+Route::controller(SocialiteController::class)->group(function () {
+    Route::get('auth/google', 'googleLogin')->name('auth.google');
+    Route::get('auth/google-callback', 'googleAuthentication')->name('auth.google-callback');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// ======================================
+// User Protected Routes (Profile, etc.)
+// ======================================
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// Route Wishlist
-Route::middleware(['auth'])->group(function () {
+    // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/{product}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });
 
-// Route order
+    // Review
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
+
+    // Balasan ulasan
+    // Route::post('/reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply')->middleware('auth');
+
+// ====================
+// Order Routes
+// ====================
 Route::get('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('order.wishlist');
-// Route::post('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('order.wishlist');
 
-require __DIR__.'/auth.php';
-
-// Manajemen Produk
-Route::resource('products', ProductController::class);
-// Daftar Produk - Menampilkan semua produk + fitur pencarian
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-
-// Tambah Produk - Menampilkan form tambah produk
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-
-// Simpan Produk - Menyimpan produk yang ditambahkan
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-
-// Edit Produk - Menampilkan form edit produk
-Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
-
-// Update Produk - Menyimpan perubahan produk
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-// Hapus Produk - Menghapus produk
-Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-
-// Show Produk - Melihat jumlah kunjungan
+// ====================
+// Product Management
+// ====================
+Route::resource('products', ProductController::class)->except(['show']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
-// Show Produk - Melihat jumlah kunjungan
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');;
-// Show Produk - Melihat jumlah kunjungan
-Route::get('/akun', [ProductController::class, 'index'])->name('products.index');;
+// ========================
+// Custom Pages (if needed)
+// ========================
+Route::get('/akun', [ProductController::class, 'index'])->name('products.index');
 
+// ==========================
+// Breeze Default Auth Routes
+// ==========================
 
+require __DIR__.'/auth.php';

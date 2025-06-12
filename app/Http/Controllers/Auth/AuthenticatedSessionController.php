@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\AdminLoginRequest;
-use App\Http\Requests\Auth\UserLoginRequest; 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan form login sesuai guard.
      */
     public function create(Request $request): View
     {
@@ -27,53 +25,52 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Proses login sesuai guard.
      */
     public function store(Request $request): RedirectResponse
-{
-     $guard = $request->route()->defaults['guard'] ?? 'web';
+    {
+        $guard = $request->route()->defaults['guard'] ?? 'web';
 
-    if ($guard === 'admin') {
-        return $this->loginAdmin(app(AdminLoginRequest::class), $request);
-    } else {
-        return $this->loginUser(app(UserLoginRequest::class), $request);
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (!Auth::guard($guard)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            return back()->withErrors([
+                'email' => 'Email atau password salah.',
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+
+        $user = Auth::guard($guard)->user();
+
+        if ($guard === 'admin' && $user->role !== 'admin') {
+            Auth::guard($guard)->logout();
+            return redirect()->route('admin.login')->withErrors(['email' => 'Role tidak sesuai.']);
+        }
+
+        if ($guard === 'web' && $user->role !== 'user') {
+            Auth::guard($guard)->logout();
+            return redirect()->route('user.login')->withErrors(['email' => 'Role tidak sesuai.']);
+        }
+
+        return redirect()->intended($guard === 'admin' ? '/dashboard' : '/');
     }
-}
-
-protected function loginUser(UserLoginRequest $request): RedirectResponse
-{
-    $request->authenticate(); 
-
-    $request->session()->regenerate();
-
-    return redirect()->intended(route('home'));
-
-}
-
-protected function loginAdmin(AdminLoginRequest $request): RedirectResponse
-{
-    $request->authenticate(); 
-
-    $request->session()->regenerate();
-
-    return redirect()->intended(route('dashboard'));
-}
 
     /**
-     * Destroy an authenticated session.
+     * Proses logout sesuai guard.
      */
     public function destroy(Request $request): RedirectResponse
     {
-        
         $guard = $request->route()->defaults['guard'] ?? 'web';
 
-        // Logout sesuai guard
         Auth::guard($guard)->logout();
 
-        // Hapus session dan regenerate token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route($guard === 'admin' ? 'admin.login' : 'user.login');
     }
 }

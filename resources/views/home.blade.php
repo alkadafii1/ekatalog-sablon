@@ -3,6 +3,9 @@
 @section('title', 'Beranda')
 
 @section('content')
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
 <style>
     .btn-brown {
         background-color: #4E71FF;
@@ -16,24 +19,48 @@
         background-color: #4E71FF;
         color: white;
     }
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-left: 5px solid #4E71FF;
+        padding-left: 1rem;
+    }
     .product-card {
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition: 0.3s ease;
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0,0,0,0.07);
     }
     .product-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .product-img {
+        height: 200px;
+        object-fit: cover;
+    }
+    .badge-category {
+        background-color: #f0f0f0;
+        color: #4E71FF;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 50px;
     }
 </style>
 
-<form action="{{ route('home') }}" method="GET" class="mb-4">
-    <div class="form-row align-items-end">
-        <div class="col-md-4">
-            <label for="search">Cari Produk</label>
-            <input type="text" name="search" id="search" class="form-control"
-                   placeholder="Nama produk..." value="{{ request('search') }}">
+<form action="{{ route('home') }}" method="GET" class="mb-5">
+    <div class="row align-items-end">
+        <div class="col-md-5 mb-3">
+            <label for="search"><i class="fas fa-search me-1"></i> Cari Produk</label>
+            <input type="text" name="search" id="search" class="form-control" placeholder="Nama produk..." value="{{ request('search') }}">
         </div>
-        <div class="col-md-4">
-            <label for="category">Kategori</label>
+        <div class="col-md-4 mb-3">
+            <label for="category"><i class="fas fa-tags me-1"></i> Kategori</label>
             <select name="category" id="category" class="form-control">
                 <option value="">-- Semua Kategori --</option>
                 @foreach ($categories as $category)
@@ -43,118 +70,51 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-brown btn-block">Filter</button>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ route('home') }}" class="btn btn-secondary btn-block">Reset</a>
+        <div class="col-md-3 mb-3 d-grid">
+            <button class="btn btn-brown"><i class="fas fa-filter me-1"></i> Filter</button>
         </div>
     </div>
 </form>
 
-<h2 class="section-title">🔥 Produk Teratas</h2>
-<div class="row">
-    @foreach ($topProducts as $product)
+{{-- Produk Teratas --}}
+<h2 class="section-title"><i class="fas fa-fire text-danger"></i> Produk Teratas</h2>
+<div class="row mb-5">
+    @forelse ($topProducts as $product)
         <div class="col-md-3 mb-4">
             <div class="card product-card">
                 <img src="{{ asset('storage/' . $product->main_image) }}" class="card-img-top product-img" alt="{{ $product->name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $product->name }}</h5>
-
-            <!-- @php
-                $whatsapp_number = '6289683028254';
-                $product_image = asset('storage/' . $product->main_image); 
-                
-                $message = "Halo, saya ingin memesan produk berikut:\n\n";
-                $message .= "✨ *{$product->name}*\n";
-                $message .= "▫️ Kategori: {$product->category->nama}\n";
-                $message .= "▫️ Deskripsi: {$product->description}\n";
-                $message .= "▫️ Gambar: {$product_image}\n\n"; 
-                $message .= "Apakah produk ini tersedia?";
-                $encoded_message = urlencode($message);
-            @endphp
-
-            <a 
-                href="https://wa.me/{{ $whatsapp_number }}?text={{ $encoded_message }}" 
-                class="btn btn-sm btn-success mb-2"
-                target="_blank"
-            >
-                📲 Pesan via WA
-            </a> -->
-                    
-                    <!-- Tombol Wishlist -->
-                    <!-- @auth
-                        <form action="{{ route('wishlist.store', $product) }}" method="POST" class="mb-2">
-                            @csrf
-                            <button type="submit" class="btn btn-sm {{ auth()->user()->wishes->contains($product->id) ? 'btn-danger' : 'btn-outline-danger' }}">
-                                @if(auth()->user()->wishes->contains($product->id))
-                                     Hapus dari Wishlist
-                                @else
-                                    ♡ Tambah ke Wishlist
-                                @endif
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger mb-2">♡ Tambah ke Wishlist</a>
-                    @endauth -->
-                    
-                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+                    <span class="badge badge-category mb-2"><i class="fas fa-star me-1 text-warning"></i> Terpopuler</span>
+                    <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary w-100 mt-2">
+                        <i class="fas fa-eye me-1"></i> Lihat Detail
+                    </a>
                 </div>
             </div>
         </div>
-    @endforeach
+    @empty
+        <p class="text-muted">Tidak ada produk teratas ditemukan.</p>
+    @endforelse
 </div>
 
-<h2 class="section-title">📦 Semua Produk</h2>
+{{-- Semua Produk --}}
+<h2 class="section-title"><i class="fas fa-box-open text-primary"></i> Semua Produk</h2>
 <div class="row">
-    @foreach ($products as $product)
+    @forelse ($products as $product)
         <div class="col-md-3 mb-4">
             <div class="card product-card">
                 <img src="{{ asset('storage/' . $product->main_image) }}" class="card-img-top product-img" alt="{{ $product->name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $product->name }}</h5>
-
-            <!-- @php
-                $whatsapp_number = '6289683028254';
-                $product_image = asset('storage/' . $product->main_image); 
-                
-                $message = "Halo, saya ingin memesan produk berikut:\n\n";
-                $message .= "✨ *{$product->name}*\n";
-                $message .= "▫️ Kategori: {$product->category->nama}\n";
-                $message .= "▫️ Deskripsi: {$product->description}\n";
-                $message .= "▫️ Gambar: {$product_image}\n\n"; 
-                $message .= "Apakah produk ini tersedia?";
-                $encoded_message = urlencode($message);
-            @endphp
-
-            <a 
-                href="https://wa.me/{{ $whatsapp_number }}?text={{ $encoded_message }}" 
-                class="btn btn-sm btn-success mb-2"
-                target="_blank"
-            >
-                📲 Pesan via WA
-            </a> -->
-                    
-                    <!-- Tombol Wishlist -->
-                    <!-- @auth
-                        <form action="{{ route('wishlist.store', $product) }}" method="POST" class="mb-2">
-                            @csrf
-                            <button type="submit" class="btn btn-sm {{ auth()->user()->wishes->contains($product->id) ? 'btn-danger' : 'btn-outline-danger' }}">
-                                @if(auth()->user()->wishes->contains($product->id))
-                                     Hapus dari Wishlist
-                                @else
-                                    ♡ Tambah ke Wishlist
-                                @endif
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger mb-2">♡ Tambah ke Wishlist</a>
-                    @endauth -->
-                    
-                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+                    <span class="badge badge-category mb-2">{{ $product->category->nama ?? 'Tanpa Kategori' }}</span>
+                    <h5 class="card-title fw-semibold">{{ $product->name }}</h5>
+                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-primary w-100 mt-2">
+                        <i class="fas fa-eye me-1"></i> Lihat Detail
+                    </a>
                 </div>
             </div>
         </div>
-    @endforeach
+    @empty
+        <p class="text-muted">Produk tidak tersedia.</p>
+    @endforelse
 </div>
 @endsection

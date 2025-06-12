@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Review;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -55,6 +56,20 @@ class Product extends Model
     {
         return $this->hasMany(SupportingImage::class);
     }
+
+    // Relasi ke Reviews
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Review::class);
+        return $this->hasMany(Review::class)->whereNull('parent_id');
+    }
+
+    public function allReviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+
 
     // Relasi ke Wishlist
     public function wishlistedBy(): BelongsToMany
