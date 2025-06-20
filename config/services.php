@@ -35,10 +35,17 @@ return [
         ],
     ],
 
+    // 'google' => [
+    //     'client_id' => env('GOOGLE_CLIENT_ID'),
+    //     'client_secret' => env('GOOGLE_CLIENT_ID'),
+    //     'redirect' => env('GOOGLE_CALLBACK_REDIRECTS')
+    // ]
+
     'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-        'client_secret' => env('GOOGLE_CLIENT_ID'),
-        'redirect' => env('GOOGLE_CALLBACK_REDIRECTS')
-    ]
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
 
 ];

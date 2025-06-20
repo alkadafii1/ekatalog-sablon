@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\{
+    DashboardController,
     Auth\AuthenticatedSessionController,
+    Auth\GoogleLoginController,
     Auth\AdminLoginController,
     Auth\UserLoginController,
     HomeController,
@@ -58,14 +60,21 @@ Route::middleware(['auth:admin', EnsureUserIsAdmin::class])->group(function () {
     })->name('dashboard');
 });
 
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth']) 
+    ->name('dashboard');
 
 // ==============================
 // Google OAuth Login for Users
 // ==============================
-Route::controller(SocialiteController::class)->group(function () {
-    Route::get('auth/google', 'googleLogin')->name('auth.google');
-    Route::get('auth/google-callback', 'googleAuthentication')->name('auth.google-callback');
-});
+// Route::controller(SocialiteController::class)->group(function () {
+//     Route::get('auth/google', 'googleLogin')->name('auth.google');
+//     Route::get('auth/google-callback', 'googleAuthentication')->name('auth.google-callback');
+// });
+
+Route::get('/auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
+
 
 // ======================================
 // User Protected Routes (Profile, etc.)
@@ -95,13 +104,12 @@ Route::get('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('o
 // ====================
 // Product Management
 // ====================
+
+Route::get('/product', [ProductController::class, 'index'])->name('products.index');
 Route::resource('products', ProductController::class)->except(['show']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-
-// ========================
-// Custom Pages (if needed)
-// ========================
-Route::get('/akun', [ProductController::class, 'index'])->name('products.index');
+Route::get('/produk-teratas', [HomeController::class, 'topProducts'])->name('top.products');
+Route::get('/kategori/{kategori}', [HomeController::class, 'byCategory'])->name('products.byCategory');
 
 // ==========================
 // Breeze Default Auth Routes
