@@ -1,4 +1,4 @@
-@extends('layouts.user')
+<!-- @extends('layouts.user')
 
 @section('title', 'Wishlist Saya')
 
@@ -46,4 +46,4 @@
     </div>
     @endfor
 </div>
-@endsection
+@endsection -->
