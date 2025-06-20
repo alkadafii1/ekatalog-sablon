@@ -12,33 +12,41 @@
                     <h2 class="card-title">Selamat Datang di Dashboard</h2>
                     <p class="card-text">Anda telah berhasil login ke sistem.</p>
                     
-                    <!-- Konten dashboard lainnya -->
                     <div class="row mt-4">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card bg-primary text-white mb-4">
                                 <div class="card-body">
                                     <h5 class="card-title">Total Produk</h5>
-                                    <p class="card-text display-4">0</p>
+                                    <p class="card-text display-4">{{ $totalProduk }}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">
-                                    <h5 class="card-title">Produk Tersedia</h5>
-                                    <p class="card-text display-4">0</p>
+                                    <h5 class="card-title">Tersedia</h5>
+                                    <p class="card-text display-4">{{ $produkTersedia }}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card bg-info text-white mb-4">
+                        <div class="col-md-3">
+                            <div class="card bg-danger text-white mb-4">
                                 <div class="card-body">
-                                    <h5 class="card-title">Produk Habis</h5>
-                                    <p class="card-text display-4">0</p>
+                                    <h5 class="card-title">Tidak Tersedia</h5>
+                                    <p class="card-text display-4">{{ $produkTidakTersedia }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-dark mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Wishlist User</h5>
+                                    <p class="card-text display-4">{{ $totalWishlistProduk }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
