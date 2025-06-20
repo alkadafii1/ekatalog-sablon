@@ -1,47 +1,65 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+    <header class="mb-3">
+        <h2 class="section-title">Perbarui Kata Sandi</h2>
+        <p class="text-muted small">
+            Gunakan kata sandi panjang dan acak untuk menjaga keamanan akun Anda.
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('password.update') }}" style="max-width: 600px;">
         @csrf
         @method('put')
 
-        <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+        {{-- Password Saat Ini --}}
+        <div class="form-group mb-3">
+            <label for="update_password_current_password" class="font-weight-bold text-dark mb-1">Kata Sandi Saat Ini</label>
+            <x-text-input
+                id="update_password_current_password"
+                name="current_password"
+                type="password"
+                class="form-control form-control-sm"
+                autocomplete="current-password" />
+            <x-input-error class="text-danger small mt-1" :messages="$errors->updatePassword->get('current_password')" />
         </div>
 
-        <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+        {{-- Password Baru --}}
+        <div class="form-group mb-3">
+            <label for="update_password_password" class="font-weight-bold text-dark mb-1">Kata Sandi Baru</label>
+            <x-text-input
+                id="update_password_password"
+                name="password"
+                type="password"
+                class="form-control form-control-sm"
+                autocomplete="new-password" />
+            <x-input-error class="text-danger small mt-1" :messages="$errors->updatePassword->get('password')" />
         </div>
 
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+        {{-- Konfirmasi Password --}}
+        <div class="form-group mb-3">
+            <label for="update_password_password_confirmation" class="font-weight-bold text-dark mb-1">Konfirmasi Kata Sandi</label>
+            <x-text-input
+                id="update_password_password_confirmation"
+                name="password_confirmation"
+                type="password"
+                class="form-control form-control-sm"
+                autocomplete="new-password" />
+            <x-input-error class="text-danger small mt-1" :messages="$errors->updatePassword->get('password_confirmation')" />
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        {{-- Tombol Simpan --}}
+        <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-primary">
+                Simpan
+            </button>
 
             @if (session('status') === 'password-updated')
-                <p
+                <span
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
+                    class="text-success small"
+                >Kata sandi berhasil diperbarui.</span>
             @endif
         </div>
     </form>
