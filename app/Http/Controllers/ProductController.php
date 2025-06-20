@@ -158,7 +158,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         
-
+;
         // Tambah jumlah kunjungan
         $product->increment('visits');
 
