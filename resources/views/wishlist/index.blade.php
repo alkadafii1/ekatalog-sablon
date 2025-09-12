@@ -47,7 +47,6 @@
                                                    id="product_{{ $index }}"
                                                    data-name="{{ $product->name }}"
                                                    data-category="{{ $product->category->nama }}"
-                                                   data-description="{{ $product->description }}"
                                                    data-image="{{ asset('storage/' . $product->main_image) }}"
                                                    data-available="{{ $product->availability }}"
                                                    class="form-check-input product-checkbox"
@@ -103,11 +102,6 @@
                                                 </small>
                                             </div>
 
-                                            @if($product->description)
-                                                <p class="card-text mb-0" style="line-height: 1.4; font-size: 0.9rem;">
-                                                    {{ Str::limit($product->description, 120) }}
-                                                </p>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -249,13 +243,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const name = checkbox.dataset.name;
             const category = checkbox.dataset.category;
-            const description = checkbox.dataset.description;
 
             message += `${index + 1}. ✨ *${name}*\n`;
             message += `   📂 Kategori: ${category}\n`;
-            if (description) {
-                message += `   📝 Deskripsi: ${description}\n`;
-            }
             message += `\n`;
         });
 

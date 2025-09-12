@@ -62,13 +62,17 @@
             margin: auto;
         }
 
-        .card-header {
-            background-color: var(--light-brown);
-            color: var(--gray-dark);
-            font-weight: 600;
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
+    .card-header {
+      background-color: var(--cream);
+      border-bottom: 1px solid var(--gray-medium);
+      padding: 1rem 1.25rem;
+      font-weight: 600;
+      color: var(--primary-brown);
+    }
+
+    .card-header i {
+      margin-right: 8px;
+    }
 
         .form-control {
             border-radius: var(--border-radius);
@@ -130,7 +134,7 @@
     <!-- Form Card -->
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-box"></i> Informasi Produk
+            <i class="fas fa-info-circle"></i> Informasi Produk
         </div>
         <div class="card-body">
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">

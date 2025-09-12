@@ -164,4 +164,20 @@ class ProductController extends Controller
 
         return view('products.show', compact('product'));
     }
+
+    public function byCategory($kategori)
+    {
+        $products = Product::with('category')
+            ->whereHas('category', function ($query) use ($kategori) {
+                $query->where('nama', 'like', "%$kategori%");
+            })
+            ->latest()
+            ->get();
+
+        $categories = Category::all();
+
+        return view('products.by-category', compact('products', 'kategori'));
+    }
+
+
 }

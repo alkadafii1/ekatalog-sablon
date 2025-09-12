@@ -122,7 +122,7 @@
         text-decoration: none;
         color: inherit;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(212, 175, 55, 0.2);
+        border: 1px solid rgba(255, 196, 0, 0.2);
         position: relative;
         overflow: hidden;
         display: block;
@@ -136,7 +136,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: var(--primary-gradient);
+        background: linear-gradient(135deg, #FFF8DC 0%, #F5DEB3 50%,rgb(255, 248, 227) 100%);
         opacity: 0;
         transition: opacity 0.3s ease;
     }
@@ -145,7 +145,8 @@
         transform: translateY(-10px) scale(1.02);
         box-shadow: var(--card-shadow-hover);
         text-decoration: none;
-        color: white;
+        color: #2d3748;
+        border-color: var(--primary-color);
     }
 
     .category-card:hover::before {
@@ -168,6 +169,7 @@
     .category-card:hover .category-icon {
         transform: scale(1.1);
         color: white;
+        filter: brightness(0.8);
     }
 
     .category-title {
@@ -178,7 +180,8 @@
     }
 
     .category-card:hover .category-title {
-        color: white;
+        color: #1a202c;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
     }
 
     /* Section Headers */
@@ -394,8 +397,8 @@
             <a href="{{ route('top.products') }}" class="category-card">
                 <div class="card-content">
                     <i class="fas fa-fire category-icon" style="color: #FF4500;"></i>
-                    <h5 class="category-title">Produk Teratas</h5>
-                    <p class="text-muted mt-2">Produk paling populer dan terlaris</p>
+                    <h5 class="category-title">Produk Trending</h5>
+                    <p class="text-muted mt-2">Produk paling banyak dilihat</p>
                 </div>
             </a>
         </div>

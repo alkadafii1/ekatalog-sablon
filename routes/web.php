@@ -54,11 +54,11 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 // ======================
 // Admin Protected Routes
 // ======================
-Route::middleware(['auth:admin', EnsureUserIsAdmin::class])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
+// Route::middleware(['auth:admin', EnsureUserIsAdmin::class])->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('dashboard');
+//     })->name('dashboard');
+// });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth']) 
@@ -105,11 +105,13 @@ Route::get('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('o
 // Product Management
 // ====================
 
-Route::get('/product', [ProductController::class, 'index'])->name('products.index');
+Route::get('/manajemen', [ProductController::class, 'index'])->name('products.index');
 Route::resource('products', ProductController::class)->except(['show']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/produk-teratas', [HomeController::class, 'topProducts'])->name('top.products');
 Route::get('/kategori/{kategori}', [HomeController::class, 'byCategory'])->name('products.byCategory');
+Route::get('/products/kategori/{kategori}', [ProductController::class, 'byCategory'])->name('products.byCategory');
+
 
 // ==========================
 // Breeze Default Auth Routes

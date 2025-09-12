@@ -1,6 +1,6 @@
 @extends('layouts.apperance')
 
-@section('title', 'Produk Teratas')
+@section('title', 'Produk Kategori: ' . ucfirst($kategori))
 
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
@@ -155,17 +155,21 @@
 </style>
 
 <div class="section-header fade-in-up">
-    <h2 class="section-title"><i class="fas fa-fire text-danger me-2"></i>Produk Trending</h2>
-    <p class="section-subtitle">Lihat koleksi produk yang paling banyak dilihat pelanggan</p>
+    <h2 class="section-title">
+        <i class="fas fa-tags text-warning me-2"></i>Produk: {{ ucfirst($kategori) }}
+    </h2>
+    <p class="section-subtitle">Lihat koleksi produk dalam kategori {{ ucfirst($kategori) }}</p>
 </div>
 
 <div class="row">
-    @forelse ($topProducts as $product)
+    @forelse ($products as $product)
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4 fade-in-up">
             <div class="product-card">
                 <img src="{{ asset('storage/' . $product->main_image) }}" class="product-img w-100" alt="{{ $product->name }}">
                 <div class="product-body">
-                    <span class="badge-category"><i class="fas fa-star me-1 text-warning"></i> Most Viewed</span>
+                    <span class="badge-category">
+                        <i class="fas fa-tag me-1 text-white-50"></i> {{ $product->category->nama ?? 'Tanpa Kategori' }}
+                    </span>
                     <h5 class="product-title">{{ $product->name }}</h5>
                     <a href="{{ route('products.show', $product->id) }}" class="btn-view-detail">
                         <i class="fas fa-eye"></i> Lihat Detail
@@ -178,7 +182,7 @@
             <div class="empty-state fade-in-up">
                 <i class="fas fa-box-open"></i>
                 <h3>Belum Ada Produk</h3>
-                <p>Produk teratas akan tampil di sini setelah mendapat banyak kunjungan.</p>
+                <p>Produk dalam kategori ini belum tersedia.</p>
             </div>
         </div>
     @endforelse

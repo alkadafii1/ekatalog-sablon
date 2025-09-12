@@ -65,14 +65,18 @@
             @php
                 $whatsapp_number = '6289683028254';
                 $product_image = asset('storage/' . $product->main_image); 
-                
-                $message = "Halo, saya ingin memesan produk berikut:\n\n";
+
+                $message = "🛍️ *PESANAN PRODUK*\n";
+                $message .= "==================\n\n";
+                $message .= "Halo! Saya tertarik untuk memesan produk berikut:\n\n";
                 $message .= "✨ *{$product->name}*\n";
-                $message .= "▫️ Kategori: {$product->category->nama}\n";
-                $message .= "▫️ Deskripsi: {$product->description}\n";
-                $message .= "▫️ Gambar: {$product_image}\n\n"; 
-                $message .= "Apakah produk ini tersedia?";
+                $message .= "📂 Kategori: {$product->category->nama}\n";
+                $message .= "🖼️ Gambar: {$product_image}\n\n";
+                $message .= "==================\n";
+                $message .= "Apakah produk ini tersedia dan bisa dipesan?\n\n";
+                $message .= "Terima kasih! 🙏";
                 $encoded_message = urlencode($message);
+
             @endphp
 
             <div class="d-flex flex-wrap gap-3">
