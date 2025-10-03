@@ -5,7 +5,7 @@
     <!-- Header Section -->
     <div class="mb-4">
         <h2 class="section-title mb-2">
-            <i class="fas fa-heart me-2"></i>Wishlist Anda
+            <i class="fas fa-heart me-2"></i>Keranjang Anda
         </h2>
         <p class="text-muted">Kelola produk favorit dan pesan langsung via WhatsApp</p>
     </div>
@@ -19,7 +19,7 @@
                       style="background: var(--accent-gold); color: white; padding: 0.5rem 1rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);">
                     {{ $wishlistItems->count() }}
                 </span>
-                <span style="color: var(--dark-text); font-weight: 500;">produk dalam wishlist</span>
+                <span style="color: var(--dark-text); font-weight: 500;">produk dalam keranjang</span>
             </div>
             <button type="button" id="pesanViaWA" class="btn btn-success px-4 py-2" 
                     style="border-radius: 25px; box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3); font-weight: 600;">
@@ -32,103 +32,114 @@
         <form id="formWishlist">
             <div class="row g-4">
                 @foreach($wishlistItems as $index => $product)
-                    <div class="col-12">
-                        <div class="product-card {{ !$product->availability ? 'opacity-75' : '' }}" 
-                             style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
-                            
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    
-                                    <!-- Checkbox -->
-                                    <div class="col-auto">
-                                        <div class="form-check">
-                                            <input type="checkbox" 
-                                                   name="produk[]"
-                                                   id="product_{{ $index }}"
-                                                   data-name="{{ $product->name }}"
-                                                   data-category="{{ $product->category->nama }}"
-                                                   data-image="{{ asset('storage/' . $product->main_image) }}"
-                                                   data-available="{{ $product->availability }}"
-                                                   class="form-check-input product-checkbox"
-                                                   style="transform: scale(1.3); accent-color: var(--accent-gold);"
-                                                   {{ !$product->availability ? 'disabled' : '' }}>
-                                        </div>
-                                    </div>
-
-                                    <!-- Product Image -->
-                                    <div class="col-md-3">
-                                        <div class="position-relative">
-                                            <div class="ratio ratio-1x1 overflow-hidden" 
-                                                 style="border-radius: 15px; background: rgba(212, 175, 55, 0.1);">
-                                                <img src="{{ asset('storage/' . $product->main_image) }}"
-                                                     alt="{{ $product->name }}"
-                                                     class="product-img w-100 h-100 gambar"
-                                                     style="transition: transform 0.3s ease; border-radius: 15px;">
-                                            </div>
-                                            @if(!$product->availability)
-                                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-3"
-                                                     style="background: rgba(139, 69, 19, 0.7); backdrop-filter: blur(2px);">
-                                                    <span class="badge bg-danger fs-6 px-3 py-2">Tidak Tersedia</span>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <!-- Product Info -->
-                                    <div class="col-md-7">
-                                        <div class="h-100 d-flex flex-column justify-content-center">
-                                            <h4 class="card-title mb-2">{{ $product->name }}</h4>
-                                            
-                                            <div class="mb-2">
-                                                @if($product->availability)
-                                                    <span class="badge fs-6 px-3 py-1 text-white" 
-                                                          style="background: #28a745; border-radius: 15px; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);">
-                                                        <i class="fas fa-check-circle me-1"></i>
-                                                        Tersedia
-                                                    </span>
-                                                @else
-                                                    <span class="badge fs-6 px-3 py-1 text-white" 
-                                                          style="background: #dc3545; border-radius: 15px; box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);">
-                                                        <i class="fas fa-times-circle me-1"></i>
-                                                        Tidak Tersedia
-                                                    </span>
-                                                @endif
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <small style="color: var(--secondary-brown); font-weight: 500;">
-                                                    <i class="fas fa-tag me-1" style="color: var(--accent-gold);"></i>
-                                                    Kategori: <span class="fw-semibold">{{ $product->category->nama }}</span>
-                                                </small>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Action Buttons -->
-                                    <div class="col-auto">
-                                        <div class="d-flex flex-column gap-2">
-                                            <!-- Remove Button -->
-                                            <form action="{{ route('wishlist.destroy', $product) }}" 
-                                                  method="POST" 
-                                                  class="remove-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="btn btn-outline-danger btn-sm rounded-circle"
-                                                        style="width: 40px; height: 40px; transition: all 0.3s ease;"
-                                                        title="Hapus dari wishlist"
-                                                        data-bs-toggle="tooltip">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-12">
+        <div class="product-card {{ !$product->availability ? 'opacity-75' : '' }}" 
+            style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+        
+        <div class="card-body">
+            <div class="row align-items-center">
+                
+                <!-- Checkbox -->
+                <div class="col-auto">
+                    <div class="form-check">
+                        <input type="checkbox" 
+                               name="produk[]"
+                               id="product_{{ $index }}"
+                               data-name="{{ $product->name }}"
+                               data-category="{{ $product->category->nama }}"
+                               data-image="{{ asset('storage/' . $product->main_image) }}"
+                               data-available="{{ $product->availability }}"
+                               class="form-check-input product-checkbox"
+                               style="transform: scale(1.3); accent-color: var(--accent-gold);"
+                               {{ !$product->availability ? 'disabled' : '' }}>
                     </div>
+                </div>
+
+                <!-- Product Image -->
+                <div class="col-md-3">
+                    <div class="position-relative">
+                        <div class="ratio ratio-1x1 overflow-hidden" 
+                             style="border-radius: 15px; background: rgba(212, 175, 55, 0.1);">
+                            <img src="{{ asset('storage/' . $product->main_image) }}"
+                                 alt="{{ $product->name }}"
+                                 class="product-img w-100 h-100 gambar"
+                                 style="transition: transform 0.3s ease; border-radius: 15px;">
+                        </div>
+                        @if(!$product->availability)
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-3"
+                                 style="background: rgba(139, 69, 19, 0.7); backdrop-filter: blur(2px);">
+                                <span class="badge bg-danger fs-6 px-3 py-2">Tidak Tersedia</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-md-7">
+                    <div class="h-100 d-flex flex-column justify-content-center">
+                        <h4 class="card-title mb-2">{{ $product->name }}</h4>
+
+                        <!-- Availability Badge -->
+                        <div class="mb-2">
+                            @if($product->availability)
+                                <span class="badge fs-6 px-3 py-1 text-white" 
+                                      style="background: #28a745; border-radius: 15px; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Tersedia
+                                </span>
+                            @else
+                                <span class="badge fs-6 px-3 py-1 text-white" 
+                                      style="background: #dc3545; border-radius: 15px; box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);">
+                                    <i class="fas fa-times-circle me-1"></i>
+                                    Tidak Tersedia
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-2">
+                            <small style="color: var(--secondary-brown); font-weight: 500;">
+                                <i class="fas fa-tag me-1" style="color: var(--accent-gold);"></i>
+                                Kategori: <span class="fw-semibold">{{ $product->category->nama }}</span>
+                            </small>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-2">
+                            <small style="color: var(--primary-brown); font-weight: 600;">
+                                <i class="fas fa-money-bill-wave me-1" style="color: var(--accent-gold);"></i>
+                                Harga: <span class="fw-semibold">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-auto">
+                    <div class="d-flex flex-column gap-2">
+                        <!-- Remove Button -->
+                        <form action="{{ route('wishlist.destroy', $product) }}" 
+                              method="POST" 
+                              class="remove-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="btn btn-outline-danger btn-sm rounded-circle"
+                                    style="width: 40px; height: 40px; transition: all 0.3s ease;"
+                                    title="Hapus dari Keranjang"
+                                    data-bs-toggle="tooltip">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
                 @endforeach
             </div>
         </form>
@@ -157,8 +168,8 @@
             <div class="mb-4">
                 <i class="fas fa-heart-broken display-1 opacity-50" style="color: var(--secondary-brown);"></i>
             </div>
-            <h3 class="mb-3" style="color: var(--primary-brown);">Wishlist Anda Kosong</h3>
-            <p class="mb-4" style="color: var(--secondary-brown);">Belum ada produk yang ditambahkan ke wishlist</p>
+            <h3 class="mb-3" style="color: var(--primary-brown);">Keranjang Anda Kosong</h3>
+            <p class="mb-4" style="color: var(--secondary-brown);">Belum ada produk yang ditambahkan ke Keranjang</p>
             <a href="{{ route('home') }}" class="btn btn-primary px-4 py-2">
                 <i class="fas fa-shopping-bag me-2"></i>
                 Jelajahi Produk
@@ -229,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let unavailableItems = [];
-        let message = "🛍️ *PESANAN WISHLIST*\n";
+        let message = "🛍️ *PESANAN DARI KERANJANG*\n";
         message += "==================\n\n";
         message += "Halo! Saya tertarik untuk memesan produk berikut:\n\n";
 
@@ -277,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Confirm delete
     removeForms.forEach(form => {
         form.addEventListener('submit', function(e) {
-            if (!confirm('Hapus produk dari wishlist?')) {
+            if (!confirm('Hapus produk dari Keranjang?')) {
                 e.preventDefault();
             }
         });

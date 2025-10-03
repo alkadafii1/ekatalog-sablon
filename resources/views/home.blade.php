@@ -436,9 +436,15 @@
                 <div class="product-card">
                     <img src="{{ asset('storage/' . $product->main_image) }}" 
                          class="product-img w-100" alt="{{ $product->name }}">
+                         
                     <div class="product-body">
                         <span class="badge-category">{{ $product->category->nama ?? 'Tanpa Kategori' }}</span>
                         <h5 class="product-title">{{ $product->name }}</h5>
+
+                         <p class="product-price">
+                            <strong>Rp {{ number_format($product->price, 0, ',', '.') }}</strong>
+                        </p>
+
                         <a href="{{ route('products.show', $product->id) }}" class="btn-view-detail">
                             <i class="fas fa-eye"></i>
                             Lihat Detail

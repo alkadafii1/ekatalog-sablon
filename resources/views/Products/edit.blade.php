@@ -164,6 +164,11 @@
           </div>
 
           <div class="form-group">
+              <label for="price">Harga Produk</label>
+              <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $product->price) }}" required step="0.01">
+          </div>
+
+          <div class="form-group">
             <label for="main_image">Gambar Utama</label>
             <div class="custom-file">
               <input type="file" class="custom-file-input" id="main_image" name="main_image" accept="image/*">

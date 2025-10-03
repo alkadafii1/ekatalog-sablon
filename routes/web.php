@@ -1,5 +1,6 @@
 <?php
 
+use app\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\{
     DashboardController,
     Auth\AuthenticatedSessionController,
@@ -12,9 +13,10 @@ use App\Http\Controllers\{
     ProfileController,
     SocialiteController,
     WishlistController,
-    ReviewController
+    ReviewController,
+    ReplyController
 };
-use App\Http\Middleware\EnsureUserIsAdmin;
+
 use Illuminate\Support\Facades\Route;
 
 // ====================
@@ -26,7 +28,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // USER Login Group
 // ====================
 
-Route::middleware('guest')->group(function () {
+Route::middleware('guest:web')->group(function () {
     Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
         ->defaults('guard', 'web')
         ->name('user.login');
@@ -91,9 +93,33 @@ Route::middleware('auth')->group(function () {
 });
 
     // Review
-    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
+    // Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews')->middleware('auth');
 
-    // Balasan ulasan
+    // Halaman ulasan toko
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+
+    // Menyimpan ulasan
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+    Route::post('/reviews/{review}/like', [ReviewController::class, 'likeReview'])->name('reviews.like');
+
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+
+    // Menyimpan balasan terhadap ulasan
+    Route::post('/reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
+
+    // // Fitur Likes
+    // Route::post('/reviews/{review}/like', [ReviewController::class, 'likeReview'])->name('reviews.like');
+
+    // Reply Routes
+    Route::post('/reviews/{review}/replies', [ReplyController::class, 'store'])->name('replies.store');
+    Route::post('/replies/{reply}/like', [ReplyController::class, 'like'])->name('replies.like');
+    Route::put('/replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
+    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
+
+        // Balasan ulasan
     // Route::post('/reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply')->middleware('auth');
 
 // ====================

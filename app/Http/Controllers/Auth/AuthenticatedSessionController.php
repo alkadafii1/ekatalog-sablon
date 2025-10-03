@@ -46,6 +46,7 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::guard($guard)->user();
 
+        // Pastikan role sesuai dengan guard
         if ($guard === 'admin' && $user->role !== 'admin') {
             Auth::guard($guard)->logout();
             return redirect()->route('admin.login')->withErrors(['email' => 'Role tidak sesuai.']);
@@ -56,8 +57,9 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('user.login')->withErrors(['email' => 'Role tidak sesuai.']);
         }
 
-        return redirect()->intended($guard === 'admin' ? '/dashboard' : '/');
+        return redirect()->intended($guard === 'admin' ? 'admin/dashboard' : '/dashboard');
     }
+
 
     /**
      * Proses logout sesuai guard.
@@ -73,4 +75,5 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->route($guard === 'admin' ? 'admin.login' : 'user.login');
     }
+
 }

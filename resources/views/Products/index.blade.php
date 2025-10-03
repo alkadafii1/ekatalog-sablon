@@ -386,15 +386,7 @@
         .action-buttons {
             flex-direction: column;
         }
-        
-        .custom-table {
-            font-size: 0.9rem;
-        }
-        
-        .custom-table thead th,
-        .custom-table tbody td {
-            padding: 0.75rem;
-        }
+
     }
 
     @media (max-width: 576px) {
@@ -449,6 +441,7 @@
                             <th><i class="fas fa-image"></i> Gambar</th>
                             <th><i class="fas fa-tag"></i> Nama Produk</th>
                             <th><i class="fas fa-align-left"></i> Deskripsi</th>
+                            <th><i class="fas fa-dollar-sign"></i> Harga</th>
                             <th><i class="fas fa-check-circle"></i> Ketersediaan</th>
                             <th><i class="fas fa-cogs"></i> Aksi</th>
                         </tr>
@@ -474,6 +467,8 @@
                                     <div class="product-description" title="{{ $product->description }}">
                                         {{ $product->description ?: 'Tidak ada deskripsi' }}
                                     </div>
+                                <td>
+                                    <strong>Rp {{ number_format($product->price, 0, ',', '.') }}</strong> <!-- Menampilkan Harga -->
                                 </td>
                                 <td>
                                     <span class="availability-badge {{ $product->availability ? 'availability-available' : 'availability-unavailable' }}">

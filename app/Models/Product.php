@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $supporting_images
  * @property int $availability
  * @property int $visits
+ * @property float $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Category|null $category
@@ -38,14 +40,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereSupportingImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereVisits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Product wherePrice($value)  <!-- Menambahkan query untuk harga -->
  * @mixin \Eloquent
  */
 class Product extends Model
 { 
+
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'main_image', 'availability', 'category_id',];
+    // Tambahkan price ke dalam $fillable agar bisa dimasukkan melalui mass assignment
+    protected $fillable = ['name', 'description', 'main_image', 'availability', 'category_id', 'price'];
 
+    // Relasi ke kategori
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
@@ -60,7 +66,6 @@ class Product extends Model
     // Relasi ke Reviews
     public function reviews()
     {
-        return $this->hasMany(\App\Models\Review::class);
         return $this->hasMany(Review::class)->whereNull('parent_id');
     }
 
@@ -68,8 +73,6 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
-
-
 
     // Relasi ke Wishlist
     public function wishlistedBy(): BelongsToMany

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             
-            $table->unique(['user_id', 'product_id']); // Cegah duplikat
+            $table->unique(['user_id', 'product_id']); 
         });
     }
 

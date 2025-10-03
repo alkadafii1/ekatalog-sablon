@@ -32,43 +32,45 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'main_image' => 'required|image',
-            'supporting_images.*' => 'image',
-            //'availability' => 'required|boolean',
-            'availability' => 'required|in:0,1',
-            'category_id' => 'required|exists:categories,id', 
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'description' => 'nullable|string|max:255',
+        'main_image' => 'required|image',
+        'supporting_images.*' => 'image',
+        'availability' => 'required|in:0,1',
+        'category_id' => 'required|exists:categories,id',
+        'price' => 'required|numeric',
+    ]);
 
-        // Simpan gambar utama
-        $mainImagePath = $request->file('main_image')->store('product_images', 'public');
+    // Simpan gambar utama
+    $mainImagePath = $request->file('main_image')->store('product_images', 'public');
 
-        // Simpan produk
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'main_image' => $mainImagePath,
-            'availability' => $request->availability,
-            'category_id' => $request->category_id, 
-        ]);
+    // Simpan produk
+    $product = Product::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'main_image' => $mainImagePath,
+        'availability' => $request->availability,
+        'category_id' => $request->category_id,
+        'price' => $request->price, 
+    ]);
 
-        // Simpan gambar pendukung jika ada
-        if ($request->hasFile('supporting_images')) {
-            foreach ($request->file('supporting_images') as $image) {
-                $imagePath = $image->store('supporting_images', 'public');
-                SupportingImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $imagePath,
-                ]);
-            }
+    // Simpan gambar pendukung jika ada
+    if ($request->hasFile('supporting_images')) {
+        foreach ($request->file('supporting_images') as $image) {
+            $imagePath = $image->store('supporting_images', 'public');
+            SupportingImage::create([
+                'product_id' => $product->id,
+                'image_path' => $imagePath,
+            ]);
         }
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
+
+    return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
+}
+
 
     public function edit($id)
     {
@@ -77,59 +79,61 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
+public function update(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
 
-        // Validasi Input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'availability' => 'required|in:0,1',
-            'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'supporting_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|exists:categories,id', 
-        ]);
+    // Validasi Input
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'description' => 'nullable|string|max:255',
+        'availability' => 'required|in:0,1',
+        'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'supporting_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'required|exists:categories,id',
+        'price' => 'required|numeric',
+    ]);
 
-        // Update Data Produk
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->availability = $request->availability;
-        $product->category_id = $request->category_id; 
+    // Update Data Produk
+    $product->name = $request->name;
+    $product->description = $request->description;
+    $product->availability = $request->availability;
+    $product->category_id = $request->category_id; 
+    $product->price = $request->price; // Update harga
 
-        // Update Gambar Utama
-        if ($request->hasFile('main_image')) {
-            // Hapus gambar lama jika ada
-            if ($product->main_image) {
-                Storage::disk('public')->delete($product->main_image);
-            }
-            // Simpan gambar baru
-            $product->main_image = $request->file('main_image')->store('products', 'public');
+    // Update Gambar Utama
+    if ($request->hasFile('main_image')) {
+        // Hapus gambar lama jika ada
+        if ($product->main_image) {
+            Storage::disk('public')->delete($product->main_image);
         }
-
-        // Update Gambar Pendukung (Optional)
-        if ($request->hasFile('supporting_images')) {
-            $supportingImages = [];
-
-            // Hapus gambar pendukung lama jika ada
-            if ($product->supporting_images) {
-                $oldImages = json_decode($product->supporting_images, true);
-                foreach ($oldImages as $oldImage) {
-                    Storage::disk('public')->delete($oldImage);
-                }
-            }
-
-            // Simpan gambar pendukung baru
-            foreach ($request->file('supporting_images') as $image) {
-                $supportingImages[] = $image->store('products', 'public');
-            }
-            $product->supporting_images = json_encode($supportingImages);
-        }
-
-        $product->save();
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
+        // Simpan gambar baru
+        $product->main_image = $request->file('main_image')->store('products', 'public');
     }
+
+    // Update Gambar Pendukung (Optional)
+    if ($request->hasFile('supporting_images')) {
+        $supportingImages = [];
+
+        // Hapus gambar pendukung lama jika ada
+        if ($product->supporting_images) {
+            $oldImages = json_decode($product->supporting_images, true);
+            foreach ($oldImages as $oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+        }
+
+        // Simpan gambar pendukung baru
+        foreach ($request->file('supporting_images') as $image) {
+            $supportingImages[] = $image->store('products', 'public');
+        }
+        $product->supporting_images = json_encode($supportingImages);
+    }
+
+    $product->save();
+
+    return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
+}
 
     public function destroy($id)
     {

@@ -94,6 +94,17 @@
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
+        .star-rating .fa-star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.2s;
+            }
+        .star-rating .fa-star.selected {
+            color: #ffc107;
+        }
+
+
         /* ===== CONTAINER UTAMA ===== */
         .container {
             background: linear-gradient(145deg, var(--cream) 0%, var(--light-cream) 50%, var(--beige) 100%);
@@ -301,7 +312,7 @@
                 <li class="nav-item">
                     <a href="{{ route('wishlist.index') }}" class="nav-link position-relative">
                         <i class="fas fa-heart me-1"></i>
-                        Wishlist
+                        Keranjang
                         @if(isset($wishlistCount) && $wishlistCount > 0)
                             <span class="badge badge-danger position-absolute" style="top: 0; right: 0; transform: translate(50%, -50%);">
                                 {{ $wishlistCount }}
@@ -309,6 +320,14 @@
                         @endif
                     </a>
                 </li>
+
+                <!-- Ulasan Toko -->
+                <li class="nav-item">
+                    <a href="{{ route('reviews.index') }}" class="nav-link">
+                        <i class="fas fa-star me-1"></i> Ulasan Toko
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown">
                         <i class="fas fa-user me-1"></i> {{ Auth::user()->name }}
@@ -318,7 +337,7 @@
                             <i class="fas fa-id-badge me-2"></i> Profil
                         </a>
                         <a class="dropdown-item" href="{{ route('wishlist.index') }}">
-                            <i class="fas fa-heart me-2"></i> Wishlist ({{ $wishlistCount ?? 0 }})
+                            <i class="fas fa-heart me-2"></i> Keranjang ({{ $wishlistCount ?? 0 }})
                         </a>
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
@@ -332,7 +351,7 @@
             @else
                 <li class="nav-item">
                     <a href="{{ route('wishlist.index') }}" class="nav-link">
-                        <i class="fas fa-heart me-1"></i>Wishlist
+                        <i class="fas fa-heart me-1"></i>Keranjang
                     </a>
                 </li>
                 <li class="nav-item">

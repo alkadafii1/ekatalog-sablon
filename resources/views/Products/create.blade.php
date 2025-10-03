@@ -163,6 +163,12 @@
                     <textarea class="form-control" id="description" name="description" rows="4" placeholder="Masukkan deskripsi produk"></textarea>
                 </div>
 
+                <!-- Harga Produk -->
+                <div class="form-group">
+                    <label for="price" class="form-label">Harga Produk</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Masukkan harga produk" required step="0.01">
+                </div>
+
                 <!-- Gambar Utama -->
                 <div class="form-group">
                     <label for="main_image" class="form-label">Gambar Utama <span class="text-danger">*</span></label>

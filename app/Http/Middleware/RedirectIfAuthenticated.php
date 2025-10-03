@@ -10,12 +10,14 @@ class RedirectIfAuthenticated
 {
     public function handle(Request $request, Closure $next, ...$guards)
     {
+        // Tentukan guard admin
+        $guards = empty($guards) ? ['admin'] : $guards;
+
+        // Mengecek apakah user sudah login
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return match ($guard) {
-                    'admin' => redirect('/admin/dashboard'),
-                    default => redirect('/dashboard'),
-                };
+                // Kalau sudah login sebagai admin
+                return $guard === 'admin' ? redirect('/admin/dashboard') : redirect('/dashboard');
             }
         }
 
