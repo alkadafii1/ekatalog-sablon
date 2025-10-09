@@ -119,8 +119,8 @@
                     
                     <div class="review-actions d-flex align-items-center">
                         {{-- Fitur Love untuk Review --}}
-                        <button class="love-button" onclick="likeReview({{ $review->id }})">
-                            ❤️ <span id="love-count-{{ $review->id }}">{{ $review->likes_count }}</span>
+                        <button class="love-button like-review-btn" data-review-id="{{ $review->id }}">
+                            ❤️ <span class="love-count" id="love-count-{{ $review->id }}">{{ $review->likes_count }}</span>
                         </button>
 
                         {{-- Tombol Balas --}}
@@ -148,27 +148,27 @@
                     @if ($review->replies && $review->replies->count())
                         <div class="reply-section mt-3">
                             <div class="reply-title mb-2">Balasan:</div>
-                            @foreach ($review->replies as $reply)
-                                <div class="reply-item mb-3 pb-2 border-bottom" id="reply-{{ $reply->id }}">
+                            @foreach ($review->replies as $replyItem)
+                                <div class="reply-item mb-3 pb-2 border-bottom" id="reply-{{ $replyItem->id }}">
                                     <div class="d-flex justify-content-between align-items-start">
-                                        <strong>{{ $reply->user ? $reply->user->name : 'Anonim ' . strtoupper(Str::random(5)) }}</strong>
-                                        <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
+                                        <strong>{{ $replyItem->user ? $replyItem->user->name : 'Anonim ' . strtoupper(Str::random(5)) }}</strong>
+                                        <small class="text-muted">{{ $replyItem->created_at->diffForHumans() }}</small>
                                     </div>
-                                    <p class="reply-comment mb-1">{{ $reply->comment }}</p>
+                                    <p class="reply-comment mb-1">{{ $replyItem->comment }}</p>
                                     
                                     <div class="reply-actions">
                                         {{-- Fitur Love untuk Balasan --}}
-                                        <button class="love-button" onclick="likeReply({{ $reply->id }})">
-                                            ❤️ <span id="reply-love-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
-                                        </button>
+                                    <button class="love-button like-reply-btn" data-reply-id="{{ $replyItem->id }}">
+                                        ❤️ <span class="reply-love-count" id="reply-love-count-{{ $replyItem->id }}">{{ $replyItem->likes_count }}</span>
+                                    </button>
 
                                         {{-- Edit/Hapus untuk pemilik balasan --}}
                                         @auth
-                                            @if(auth()->id() === $reply->user_id)
-                                                <button class="btn btn-sm btn-outline-secondary ms-2 edit-reply" data-reply-id="{{ $reply->id }}">
+                                            @if(auth()->id() === $replyItem->user_id)
+                                                <button class="btn btn-sm btn-outline-secondary ms-2 edit-reply" data-reply-id="{{ $replyItem->id }}">
                                                     <i class="fas fa-edit me-1"></i>Edit
                                                 </button>
-                                                <form action="{{ route('replies.destroy', $reply->id) }}" method="POST" class="d-inline ms-2">
+                                                <form action="{{ route('replies.destroy', $replyItem->id) }}" method="POST" class="d-inline ms-2">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus balasan ini?')">
                                                         <i class="fas fa-trash me-1"></i>Hapus
@@ -351,7 +351,7 @@
         .catch(error => console.error('Error:', error));
     }
 
-    // Like Reply Function
+    // Like Reply Function - TARUH DI SINI
     function likeReply(replyId) {
         fetch(`/replies/${replyId}/like`, {
             method: 'POST',
@@ -376,41 +376,5 @@
         })
         .catch(error => console.error('Error:', error));
     }
-
-    // Edit Review Function (Basic Implementation)
-    document.querySelectorAll('.edit-review').forEach(button => {
-        button.addEventListener('click', function() {
-            const reviewId = this.getAttribute('data-review-id');
-            const reviewItem = document.getElementById(`review-${reviewId}`);
-            const comment = reviewItem.querySelector('.review-comment').textContent;
-            
-            // Replace with edit form (you can implement this as needed)
-            const newContent = prompt('Edit ulasan Anda:', comment);
-            if (newContent !== null) {
-                // Here you would typically make an AJAX request to update the review
-                console.log('Updating review:', reviewId, 'with content:', newContent);
-                // For now, just update the display
-                reviewItem.querySelector('.review-comment').textContent = newContent;
-            }
-        });
-    });
-
-    // Edit Reply Function (Basic Implementation)
-    document.querySelectorAll('.edit-reply').forEach(button => {
-        button.addEventListener('click', function() {
-            const replyId = this.getAttribute('data-reply-id');
-            const replyItem = document.getElementById(`reply-${replyId}`);
-            const comment = replyItem.querySelector('.reply-comment').textContent;
-            
-            // Replace with edit form (you can implement this as needed)
-            const newContent = prompt('Edit balasan Anda:', comment);
-            if (newContent !== null) {
-                // Here you would typically make an AJAX request to update the reply
-                console.log('Updating reply:', replyId, 'with content:', newContent);
-                // For now, just update the display
-                replyItem.querySelector('.reply-comment').textContent = newContent;
-            }
-        });
-    });
 </script>
 @endsection

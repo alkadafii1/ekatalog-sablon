@@ -14,7 +14,8 @@ use App\Http\Controllers\{
     SocialiteController,
     WishlistController,
     ReviewController,
-    ReplyController
+    ReplyController,
+    SaleController
 };
 
 use Illuminate\Support\Facades\Route;
@@ -126,6 +127,13 @@ Route::middleware('auth')->group(function () {
 // Order Routes
 // ====================
 Route::get('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('order.wishlist');
+
+// ====================
+// Laporan keuangan Routes
+// ====================
+
+Route::get('sales/report', [SaleController::class, 'report'])->name('sales.report');
+Route::resource('sales', SaleController::class);
 
 // ====================
 // Product Management

@@ -386,6 +386,11 @@
                 <span>Manajemen Produk</span>
             </a>
 
+            <a href="{{ route('sales.index') }}" class="nav-item {{ request()->routeIs('sales.*') ? 'active' : '' }}">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Penjualan</span>
+            </a>
+
         </div>
 
         <div class="logout-section">
