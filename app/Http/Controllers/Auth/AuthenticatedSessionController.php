@@ -10,70 +10,61 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Tampilkan form login sesuai guard.
-     */
     public function create(Request $request): View
     {
         $guard = $request->route()->defaults['guard'] ?? 'web';
 
-        if ($guard === 'admin') {
-            return view('auth.admin-login');
-        }
-
-        return view('auth.user-login');
+        return $guard === 'admin'
+            ? view('auth.admin-login')
+            : view('auth.user-login');
     }
 
-    /**
-     * Proses login sesuai guard.
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $guard = $request->route()->defaults['guard'] ?? 'web';
 
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        // Validasi input
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::guard($guard)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-            return back()->withErrors([
-                'email' => 'Email atau password salah.',
-            ])->onlyInput('email');
-        }
+        // Tentukan guard dari route yang dipanggil
+        $guard = $request->route()->defaults['guard'] ?? 'web';
 
-        $request->session()->regenerate();
+        // Login sesuai guard
+        if (Auth::guard($guard)->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
 
-        $user = Auth::guard($guard)->user();
+            $user = Auth::guard($guard)->user();
 
-        // Pastikan role sesuai dengan guard
-        if ($guard === 'admin' && $user->role !== 'admin') {
+            // Jika user admin
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            }
+
+            // Jika user biasa
+            if ($user->role === 'user') {
+                return redirect()->intended('/');
+            }
+
+            // Jika role tidak terdeteksi
             Auth::guard($guard)->logout();
-            return redirect()->route('admin.login')->withErrors(['email' => 'Role tidak sesuai.']);
+            return back()->withErrors(['email' => 'Role tidak dikenali.']);
         }
 
-        if ($guard === 'web' && $user->role !== 'user') {
-            Auth::guard($guard)->logout();
-            return redirect()->route('user.login')->withErrors(['email' => 'Role tidak sesuai.']);
-        }
-
-        return redirect()->intended($guard === 'admin' ? 'admin/dashboard' : '/dashboard');
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 
 
-    /**
-     * Proses logout sesuai guard.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        $guard = $request->route()->defaults['guard'] ?? 'web';
-
-        Auth::guard($guard)->logout();
+        Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route($guard === 'admin' ? 'admin.login' : 'user.login');
+        return redirect()->route('user.login');
     }
-
 }

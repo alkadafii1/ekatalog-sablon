@@ -10,7 +10,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title">Selamat Datang di Dashboard</h2>
-                    <p class="card-text">Anda telah berhasil login ke sistem.</p>
+                    <p class="card-text">Anda telah berhasil login ke sistem User.</p>
                     
                     <div class="row mt-4">
                         <div class="col-md-3">

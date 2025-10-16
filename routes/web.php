@@ -1,6 +1,6 @@
 <?php
 
-use app\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\{
     DashboardController,
     Auth\AuthenticatedSessionController,
@@ -29,7 +29,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // USER Login Group
 // ====================
 
-Route::middleware('guest:web')->group(function () {
+Route::middleware('guest:web', 'logout.other.guards:web')->group(function () {
     Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
         ->defaults('guard', 'web')
         ->name('user.login');
@@ -42,7 +42,7 @@ Route::middleware('guest:web')->group(function () {
 // ====================
 // ADMIN Login Group
 // ====================
-Route::middleware('guest:admin')->group(function () {
+Route::middleware('guest:admin', 'logout.other.guards:admin')->group(function () {
     Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
         ->defaults('guard', 'admin')
         ->name('admin.login');
@@ -150,5 +150,29 @@ Route::get('/products/kategori/{kategori}', [ProductController::class, 'byCatego
 // ==========================
 // Breeze Default Auth Routes
 // ==========================
+
+//use App\Http\Middleware\EnsureUserIsAdmin;
+
+// ====================
+// Admin Area
+// ====================
+Route::middleware(['auth:admin', EnsureUserIsAdmin::class])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+    });
+
+// ====================
+// User Area
+// ====================
+// Route::middleware(['auth:web'])
+//     ->group(function () {
+//         Route::get('/', [HomeController::class, 'index'])
+//             ->name('home');
+//     });
+
+
 
 require __DIR__.'/auth.php';

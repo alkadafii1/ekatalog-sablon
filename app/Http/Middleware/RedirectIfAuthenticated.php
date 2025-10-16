@@ -10,14 +10,19 @@ class RedirectIfAuthenticated
 {
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        // Tentukan guard admin
-        $guards = empty($guards) ? ['admin'] : $guards;
+        $guards = empty($guards) ? [null] : $guards;
 
-        // Mengecek apakah user sudah login
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // Kalau sudah login sebagai admin
-                return $guard ===  redirect('/dashboard');
+                $user = Auth::guard($guard)->user();
+
+                if ($user->role === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+
+                if ($user->role === 'user') {
+                    return redirect()->route('dashboard');
+                }
             }
         }
 
