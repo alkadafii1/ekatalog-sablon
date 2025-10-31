@@ -54,6 +54,9 @@ Route::middleware('guest:admin', 'logout.other.guards:admin')->group(function ()
 
 // Logout (admin dan user)
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+//reset password
+//Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+
 // ======================
 // Admin Protected Routes
 // ======================
