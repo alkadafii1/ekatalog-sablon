@@ -14,7 +14,7 @@ class HomeController extends Controller
         $search = $request->query('search');
         $categoryId = $request->query('category');
 
-        $products = Product::with('supportingImages', 'category')
+        $products = Product::with('category')
             ->when($search, fn ($query) => $query->where('name', 'like', '%' . $search . '%'))
             ->when($categoryId, fn ($query) => $query->where('category_id', $categoryId))
             ->where('availability', true)

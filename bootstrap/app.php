@@ -12,8 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
             $middleware->alias([
-            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
-            'logout.other.guards' => \App\Http\Middleware\LogoutOtherGuards::class,
+            'admin' => \App\Http\Middleware\AdminAuth::class,
+            'user' => \App\Http\Middleware\UserAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

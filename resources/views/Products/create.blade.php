@@ -178,13 +178,6 @@
                     </div>
                 </div>
 
-
-                <!-- Gambar Pendukung -->
-                <!-- <div class="form-group">
-                    <label for="supporting_images" class="form-label">Gambar Pendukung</label>
-                    <input type="file" class="form-control-file" id="supporting_images" name="supporting_images[]" accept="image/*" multiple>
-                </div> -->
-
                 <!-- Ketersediaan -->
                 <div class="form-group">
                     <label for="availability" class="form-label">Ketersediaan Produk</label>

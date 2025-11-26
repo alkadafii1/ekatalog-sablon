@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
-{
+{   
     public function index()
     {
         $sales = Sale::with('items')->latest()->paginate(10);

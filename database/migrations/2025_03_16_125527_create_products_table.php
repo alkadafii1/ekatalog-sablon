@@ -12,7 +12,6 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('main_image');
-            $table->json('supporting_images')->nullable();
             $table->boolean('availability')->default(true);
             $table->timestamps();
         });

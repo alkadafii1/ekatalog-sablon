@@ -1,55 +1,41 @@
 <?php
 
-// namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-// use App\Http\Controllers\Controller;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
-// use Illuminate\Http\RedirectResponse;
-// use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-// class AdminLoginController extends Controller
-// {
-//     public function create(): View
-//     {
-//         return view('auth.admin-login');
-//     }
+class AdminLoginController extends Controller
+{
+    public function showLoginForm()
+    {
+        return view('admin.login');
+    }
 
-//     public function store(Request $request): RedirectResponse
-//     {
-//         $request->validate([
-//             'email' => ['required', 'email'],
-//             'password' => ['required'],
-//         ]);
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-//         if (!Auth::guard('admin')->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-//             return back()->withErrors([
-//                 'email' => 'Email atau password salah.',
-//             ])->onlyInput('email');
-//         }
+        if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/dashboard');
+        }
 
-//         $request->session()->regenerate();
+        return back()->withErrors([
+            'email' => 'Email atau password salah.'
+        ])->onlyInput('email');
+    }
 
-//         $user = Auth::guard('admin')->user();
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-//         if ($user && $user->role === 'admin') {
-//             return redirect()->intended('/admin/dashboard');
-//         }
-
-//         Auth::guard('admin')->logout();
-
-//         return redirect()->route('admin.login')->withErrors([
-//             'email' => 'Role tidak sesuai.',
-//         ]);
-//     }
-
-//     public function destroy(Request $request): RedirectResponse
-//     {
-//         Auth::guard('admin')->logout();
-
-//         $request->session()->invalidate();
-//         $request->session()->regenerateToken();
-
-//         return redirect()->route('admin.login');
-//     }
-// }
+        return redirect('/admin/login');
+    }
+}

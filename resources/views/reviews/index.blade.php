@@ -128,12 +128,8 @@
                             <i class="fas fa-reply me-1"></i>Balas
                         </button>
 
-                        {{-- Edit/Hapus untuk pemilik review --}}
                         @auth
                             @if(auth()->id() === $review->user_id)
-                                <button class="btn btn-sm btn-outline-secondary ms-2 edit-review" data-review-id="{{ $review->id }}">
-                                    <i class="fas fa-edit me-1"></i>Edit
-                                </button>
                                 <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="d-inline ms-2">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus ulasan ini?')">
@@ -162,12 +158,9 @@
                                         ❤️ <span class="reply-love-count" id="reply-love-count-{{ $replyItem->id }}">{{ $replyItem->likes_count }}</span>
                                     </button>
 
-                                        {{-- Edit/Hapus untuk pemilik balasan --}}
+                                   
                                         @auth
                                             @if(auth()->id() === $replyItem->user_id)
-                                                <button class="btn btn-sm btn-outline-secondary ms-2 edit-reply" data-reply-id="{{ $replyItem->id }}">
-                                                    <i class="fas fa-edit me-1"></i>Edit
-                                                </button>
                                                 <form action="{{ route('replies.destroy', $replyItem->id) }}" method="POST" class="d-inline ms-2">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus balasan ini?')">

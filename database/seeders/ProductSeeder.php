@@ -25,10 +25,6 @@ class ProductSeeder extends Seeder
             'name' => 'Undangan Digital A',
             'description' => 'Undangan digital untuk acara pernikahan.',
             'main_image' => 'images/undangan_a.jpg',
-            'supporting_images' => json_encode([
-                'images/undangan_a_1.jpg',
-                'images/undangan_a_2.jpg',
-            ]),
             'availability' => true,
             'category_id' => $undangan->id,
         ]);
@@ -38,10 +34,6 @@ class ProductSeeder extends Seeder
             'name' => 'Amplop Coklat',
             'description' => 'Amplop untuk undangan berbahan daur ulang.',
             'main_image' => 'images/amplop.jpg',
-            'supporting_images' => json_encode([
-                'images/amplop_1.jpg',
-                'images/amplop_2.jpg',
-            ]),
             'availability' => true,
             'category_id' => $alatBahan->id,
         ]);

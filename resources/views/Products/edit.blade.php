@@ -176,14 +176,6 @@
             </div>
           </div>
 
-          <!-- <div class="form-group">
-            <label for="supporting_images">Gambar Pendukung</label>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="supporting_images" name="supporting_images[]" accept="image/*" multiple>
-              <label class="custom-file-label" for="supporting_images">Pilih gambar tambahan...</label>
-            </div>
-          </div> -->
-
           <div class="form-group">
             <label for="availability">Ketersediaan Produk</label>
             <select class="form-control" id="availability" name="availability" required>

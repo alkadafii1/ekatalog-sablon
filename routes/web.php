@@ -17,7 +17,7 @@ use App\Http\Controllers\{
     ReplyController,
     SaleController
 };
-
+use App\Http\Middleware\AdminAuth;
 use Illuminate\Support\Facades\Route;
 
 // ====================
@@ -28,32 +28,34 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // ====================
 // USER Login Group
 // ====================
+Route::get('/login', [UserLoginController::class, 'showLoginForm'])
+    ->name('login');       
 
-Route::middleware('guest:web', 'logout.other.guards:web')->group(function () {
-    Route::get('/user/login', [AuthenticatedSessionController::class, 'create'])
-        ->defaults('guard', 'web')
-        ->name('user.login');
+Route::post('/login', [UserLoginController::class, 'login'])
+    ->name('user.login.post'); 
 
-    Route::post('/user/login', [AuthenticatedSessionController::class, 'store'])
-        ->defaults('guard', 'web')
-        ->name('user.login.post');
-});
+Route::post('/logout', [UserLoginController::class, 'logout'])
+    ->name('user.logout');
 
 // ====================
 // ADMIN Login Group
 // ====================
-Route::middleware('guest:admin', 'logout.other.guards:admin')->group(function () {
-    Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
-        ->defaults('guard', 'admin')
-        ->name('admin.login');
 
-    Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
-        ->defaults('guard', 'admin')
-        ->name('admin.login.post');
+Route::middleware(['auth:admin'])->get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->name('dashboard');
+
+Route::prefix('admin')->group(function () {
+    // Login Admin
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
+    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+    // Route yang butuh autentikasi admin
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
 });
-
-// Logout (admin dan user)
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 // ======================
 // Admin Protected Routes
 // ======================
@@ -63,9 +65,9 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 //     })->name('dashboard');
 // });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth']) 
-    ->name('dashboard');
+// Route::get('/dashboard', [DashboardController::class, 'index'])
+//     ->middleware(['auth']) 
+//     ->name('dashboard');
 
 // ==============================
 // Google OAuth Login for Users
@@ -82,7 +84,7 @@ Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogle
 // ======================================
 // User Protected Routes (Profile, etc.)
 // ======================================
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:web')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -156,13 +158,13 @@ Route::get('/products/kategori/{kategori}', [ProductController::class, 'byCatego
 // ====================
 // Admin Area
 // ====================
-Route::middleware(['auth:admin', EnsureUserIsAdmin::class])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])
-            ->name('dashboard');
-    });
+// Route::middleware(['auth:admin', AdminAuth::class])
+//     ->prefix('admin')
+//     ->name('admin.')
+//     ->group(function () {
+//         Route::get('/dashboard', [DashboardController::class, 'index'])
+//             ->name('dashboard');
+//     });
 
 // ====================
 // User Area
