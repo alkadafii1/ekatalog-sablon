@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('rating')->nullable(); // Nullable untuk balasan
             $table->text('comment');
+            $table->integer('likes_count')->default(0);
             $table->unsignedBigInteger('parent_id')->nullable(); // Untuk relasi balasan
             $table->timestamps();
             

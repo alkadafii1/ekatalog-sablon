@@ -3,7 +3,7 @@
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\{
     DashboardController,
-    Auth\AuthenticatedSessionController,
+    // Auth\AuthenticatedSessionController,
     Auth\GoogleLoginController,
     Auth\AdminLoginController,
     Auth\UserLoginController,
@@ -11,7 +11,7 @@ use App\Http\Controllers\{
     OrderController,
     ProductController,
     ProfileController,
-    SocialiteController,
+    // SocialiteController,
     WishlistController,
     ReviewController,
     ReplyController,
@@ -29,7 +29,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // USER Login Group
 // ====================
 Route::get('/login', [UserLoginController::class, 'showLoginForm'])
-    ->name('login');       
+    ->name('user.login');       
 
 Route::post('/login', [UserLoginController::class, 'login'])
     ->name('user.login.post'); 
@@ -56,26 +56,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 });
-// ======================
-// Admin Protected Routes
-// ======================
-// Route::middleware(['auth:admin', EnsureUserIsAdmin::class])->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
-// });
-
-// Route::get('/dashboard', [DashboardController::class, 'index'])
-//     ->middleware(['auth']) 
-//     ->name('dashboard');
 
 // ==============================
 // Google OAuth Login for Users
 // ==============================
-// Route::controller(SocialiteController::class)->group(function () {
-//     Route::get('auth/google', 'googleLogin')->name('auth.google');
-//     Route::get('auth/google-callback', 'googleAuthentication')->name('auth.google-callback');
-// });
 
 Route::get('/auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
@@ -113,27 +97,21 @@ Route::middleware('auth:web')->group(function () {
     // Menyimpan balasan terhadap ulasan
     Route::post('/reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
 
-    // // Fitur Likes
-    // Route::post('/reviews/{review}/like', [ReviewController::class, 'likeReview'])->name('reviews.like');
-
     // Reply Routes
     Route::post('/reviews/{review}/replies', [ReplyController::class, 'store'])->name('replies.store');
     Route::post('/replies/{reply}/like', [ReplyController::class, 'like'])->name('replies.like');
     Route::put('/replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
     Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
 
-        // Balasan ulasan
-    // Route::post('/reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply')->middleware('auth');
-
 // ====================
 // Order Routes
 // ====================
 Route::get('/order/wishlist', [OrderController::class, 'fromWishlist'])->name('order.wishlist');
+Route::post('/order/from-wishlist', [OrderController::class, 'fromWishlist'])->name('order.from-wishlist');
 
 // ====================
 // Laporan keuangan Routes
 // ====================
-
 Route::get('sales/report', [SaleController::class, 'report'])->name('sales.report');
 Route::resource('sales', SaleController::class);
 

@@ -18,16 +18,18 @@ class GoogleLoginController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        $user = User::firstOrCreate([
-            'email' => $googleUser->getEmail(),
-        ], [
-            'name' => $googleUser->getName(),
-            'password' => bcrypt('google_dummy'), // password dummy
-            'email_verified_at' => now(),
-        ]);
+        // Gunakan updateOrCreate supaya email_verified_at selalu diupdate
+        $user = User::updateOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'name' => $googleUser->getName(),
+                'password' => bcrypt('google_dummy'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         Auth::login($user);
 
-        return redirect('/'); // arahkan ke halaman home atau dashboard
+        return redirect('/');
     }
 }

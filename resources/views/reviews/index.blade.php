@@ -250,7 +250,7 @@
 <div class="card mb-5">
     <div class="card-body text-center">
         <div class="alert alert-warning mb-0">
-            Silakan <a href="{{ route('login') }}" class="alert-link">login</a> untuk menulis ulasan.
+            Silakan <a href="{{ route('user.login') }}" class="alert-link">login</a> untuk menulis ulasan.
         </div>
     </div>
 </div>

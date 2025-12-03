@@ -13,7 +13,7 @@ class WishlistController extends Controller
         $user = Auth::guard('web')->user();
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Silakan login sebagai user.');
+            return redirect()->route('user.login')->with('error', 'Silakan login sebagai user.');
         }
 
         $wishlistItems = $user->wishes()->with('category')->get();
@@ -26,7 +26,7 @@ class WishlistController extends Controller
         $user = Auth::guard('web')->user();
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Silakan login sebagai user.');
+            return redirect()->route('user.login')->with('error', 'Silakan login sebagai user.');
         }
 
         $user->wishes()->syncWithoutDetaching([$product->id]);
@@ -39,7 +39,7 @@ class WishlistController extends Controller
         $user = Auth::guard('web')->user();
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Silakan login sebagai user.');
+            return redirect()->route('user.login')->with('error', 'Silakan login sebagai user.');
         }
 
         $user->wishes()->detach($product->id);

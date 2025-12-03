@@ -21,7 +21,7 @@ class Sale extends Model
     ];
 
     protected $casts = [
-        'transaction_date' => 'date',
+        'transaction_date' => 'date', // supaya ->format() aman
         'total_amount' => 'decimal:2',
     ];
 
@@ -30,14 +30,15 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
-    // Generate transaction number automatically
     public static function generateTransactionNumber()
     {
         $date = now()->format('Ymd');
-        $lastSale = static::where('transaction_number', 'like', "INV-{$date}-%")->latest()->first();
-        
+        $lastSale = static::where('transaction_number', 'like', "INV-{$date}-%")
+                          ->latest('id')
+                          ->first();
+
         $number = $lastSale ? (int) substr($lastSale->transaction_number, -4) + 1 : 1;
-        
+
         return "INV-{$date}-" . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 }

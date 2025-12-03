@@ -66,40 +66,34 @@ public function store(Request $request)
         return view('products.edit', compact('product', 'categories'));
     }
 
-public function update(Request $request, $id)
+public function update(Request $request, Product $product)
 {
-    $product = Product::findOrFail($id);
-
-    // Validasi Input
     $request->validate([
-        'name' => 'required|string|max:100',
-        'description' => 'nullable|string|max:255',
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'main_image' => 'nullable|image',
         'availability' => 'required|in:0,1',
-        'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'category_id' => 'required|exists:categories,id',
         'price' => 'required|numeric',
     ]);
 
-    // Update Data Produk
-    $product->name = $request->name;
-    $product->description = $request->description;
-    $product->availability = $request->availability;
-    $product->category_id = $request->category_id; 
-    $product->price = $request->price; // Update harga
+    $data = $request->only(['name', 'description', 'availability', 'category_id', 'price']);
 
-    // Update Gambar Utama
     if ($request->hasFile('main_image')) {
-        // Hapus gambar lama jika ada
-        if ($product->main_image) {
+        // Hapus gambar lama
+        if ($product->main_image && Storage::disk('public')->exists($product->main_image)) {
             Storage::disk('public')->delete($product->main_image);
         }
-        // Simpan gambar baru
-        $product->main_image = $request->file('main_image')->store('products', 'public');
+
+        // Simpan gambar baru di folder product_images
+        $data['main_image'] = $request->file('main_image')->store('product_images', 'public');
     }
 
+    $product->update($data);
 
     return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
 }
+
 
     public function destroy($id)
     {
